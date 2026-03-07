@@ -17,13 +17,13 @@ Please act as an expert tutor and instructional designer. Extract the key inform
 Follow these strict rules for the JSON output:
 1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
 2. The root must be a JSON Array [ ... ].
-3. Group the information into logical "topics" based on the sources.
+3. Group the information into logical "topics" based on the sources. CRITICAL: Be extremely thorough. Create a high volume of topics to ensure no key information is left out.
 4. For each topic, provide:
    - "id": A unique string (e.g., "1", "2").
    - "topic": A short title for this group of information.
    - "lecture_text": A comprehensive, well-written, 2-3 paragraph study guide explaining the topic context fully (Markdown supported). CRITICAL: This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": An array of strings. Maximum 4 bullet points.
-   - "flashcards": An array of objects. Mix 3 types of flashcards (create 3-5 total per topic):
+   - "flashcards": An array of objects. Mix 3 types of flashcards. CRITICAL: Provide AT LEAST 5 flashcards per topic (ideally 5-8) to ensure full coverage:
       * Type 1 (Basic/Standard): { "type": "basic", "question": "...", "answer": "..." }
       * Type 2 (Multiple Choice - 1 correct): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } 
       * Type 3 (Multiple Correct / Choose all that apply): { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] }
