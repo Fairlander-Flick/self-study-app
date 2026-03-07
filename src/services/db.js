@@ -65,6 +65,15 @@ export const getDeck = async (id) => {
 };
 
 /**
+ * Update an existing deck
+ * @param {Object} deck - Complete updated deck object
+ */
+export const updateDeck = async (deck) => {
+  const db = await getDB();
+  await db.put('decks', deck);
+};
+
+/**
  * Delete a deck and its sessions
  * @param {string} id
  */

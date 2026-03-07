@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getDeck, saveSession } from '../services/db.js';
+import { getDeck, saveSession, updateDeck } from '../services/db.js';
 import FlashCard from '../components/FlashCard.jsx';
 import './StudyPage.css';
 
@@ -97,6 +97,44 @@ export default function StudyPage() {
         }
     };
 
+    const handleDiscard = async () => {
+        const currentCard = queue[currentIndex];
+
+        // Optimistically remove from queue
+        const newQueue = queue.filter((_, idx) => idx !== currentIndex);
+        setQueue(newQueue);
+
+        // Permanently remove from DB
+        try {
+            const d = await getDeck(id);
+            if (d) {
+                const topic = d.topics.find(t => t.id === currentCard.topicId);
+                if (topic) {
+                    topic.flashcards = topic.flashcards.filter(fc => fc.question !== currentCard.question);
+                    await updateDeck(d);
+                }
+            }
+
+            // Remove from session storage to prevent resurfacing on retry
+            const likedJson = sessionStorage.getItem(`swipe_liked_${id}`);
+            if (likedJson) {
+                const liked = JSON.parse(likedJson);
+                const sessTopic = liked.find(t => t.id === currentCard.topicId);
+                if (sessTopic) {
+                    sessTopic.flashcards = sessTopic.flashcards.filter(fc => fc.question !== currentCard.question);
+                    sessionStorage.setItem(`swipe_liked_${id}`, JSON.stringify(liked));
+                }
+            }
+        } catch (e) {
+            console.error("Failed to discard flashcard permanently", e);
+        }
+
+        // Check if we reached the end
+        if (newQueue.length === 0 || currentIndex >= newQueue.length) {
+            finishSession(sessionStats);
+        }
+    };
+
     if (loading) return <div className="page-center"><div className="loading-spinner" /></div>;
 
     const currentCard = queue[currentIndex];
@@ -125,9 +163,10 @@ export default function StudyPage() {
 
             <div className="study-arena">
                 <FlashCard
-                    key={currentIndex}
+                    key={queue[currentIndex]?.question || currentIndex}
                     card={currentCard}
                     onAnswer={handleAnswer}
+                    onDiscard={handleDiscard}
                 />
             </div>
         </div>

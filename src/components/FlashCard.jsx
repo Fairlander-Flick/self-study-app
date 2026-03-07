@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import './FlashCard.css';
 
-export default function FlashCard({ card, onAnswer }) {
+export default function FlashCard({ card, onAnswer, onDiscard }) {
     const [flipped, setFlipped] = useState(false);
     const [answered, setAnswered] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -25,6 +25,16 @@ export default function FlashCard({ card, onAnswer }) {
             >
                 {/* Front */}
                 <div className="flashcard-face flashcard-front">
+                    <div style={{ position: 'absolute', top: '16px', left: '16px' }}>
+                        <button
+                            className="btn btn-ghost btn-sm"
+                            onClick={(e) => { e.stopPropagation(); if (onDiscard) onDiscard(); }}
+                            title="Discard this question permanently"
+                            style={{ color: 'var(--clr-danger)', padding: '6px 10px', fontSize: '12px', border: '1px solid rgba(248, 113, 113, 0.3)', background: 'rgba(248, 113, 113, 0.05)' }}
+                        >
+                            🗑️ Discard
+                        </button>
+                    </div>
                     <div className="flashcard-topic">{card.topicName}</div>
                     <div className="flashcard-question-area">
                         <h3>{card.question}</h3>
@@ -57,6 +67,16 @@ export default function FlashCard({ card, onAnswer }) {
 
                 {/* Back */}
                 <div className="flashcard-face flashcard-back">
+                    <div style={{ position: 'absolute', top: '16px', left: '16px' }}>
+                        <button
+                            className="btn btn-ghost btn-sm"
+                            onClick={(e) => { e.stopPropagation(); if (onDiscard) onDiscard(); }}
+                            title="Discard this question permanently"
+                            style={{ color: 'var(--clr-danger)', padding: '6px 10px', fontSize: '12px', border: '1px solid rgba(248, 113, 113, 0.3)', background: 'rgba(248, 113, 113, 0.05)' }}
+                        >
+                            🗑️ Discard
+                        </button>
+                    </div>
                     <div className="flashcard-topic">{card.topicName}</div>
                     <div className="flashcard-answer">
                         {Array.isArray(card.answer) ? (
