@@ -49,25 +49,25 @@ export default function SwipeCard({ topic, onSwipe }) {
         >
             {/* Like overlay */}
             <motion.div className="swipe-overlay like-overlay" style={{ opacity: likeOpacity }}>
-                <span>ÇALIŞACAĞIM ✓</span>
+                <span>STUDY ✓</span>
             </motion.div>
 
             {/* Skip overlay */}
             <motion.div className="swipe-overlay skip-overlay" style={{ opacity: skipOpacity }}>
-                <span>GEÇ ✗</span>
+                <span>SKIP ✗</span>
             </motion.div>
 
             {/* Card content */}
             <div className="swipe-card-content">
                 <div className="swipe-card-header">
-                    <div className="swipe-card-number">Konu</div>
+                    <div className="swipe-card-number">Topic</div>
                     <h2 className="swipe-card-topic">{topic.topic}</h2>
                 </div>
 
                 <div className="swipe-card-divider" />
 
                 <div className="swipe-card-points">
-                    <p className="swipe-card-points-label">Kilit Noktalar</p>
+                    <p className="swipe-card-points-label">Key Points</p>
                     <ul className="swipe-card-points-list">
                         {topic.summary_points.map((point, i) => (
                             <li key={i} className="swipe-card-point">
@@ -79,8 +79,8 @@ export default function SwipeCard({ topic, onSwipe }) {
                 </div>
 
                 <div className="swipe-card-footer-hint">
-                    <span>← Sürükle Geç</span>
-                    <span>Çalışacağım →</span>
+                    <span>← Swipe Skip</span>
+                    <span>Study →</span>
                 </div>
             </div>
         </motion.div>

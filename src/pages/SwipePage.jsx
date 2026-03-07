@@ -81,8 +81,8 @@ export default function SwipePage() {
                     <div className="progress-bar-fill" style={{ width: `${progress * 100}%` }} />
                 </div>
                 <div className="swipe-progress-labels">
-                    <span className="text-success">✓ {liked.length} seçildi</span>
-                    <span className="text-muted">✗ {skipped.length} geçildi</span>
+                    <span className="text-success">✓ {liked.length} selected</span>
+                    <span className="text-muted">✗ {skipped.length} skipped</span>
                 </div>
             </div>
 
@@ -91,8 +91,8 @@ export default function SwipePage() {
                 <div className="swipe-arena">
                     {/* Legend */}
                     <div className="swipe-legend">
-                        <span className="swipe-hint skip">← Biliyorum / Geç</span>
-                        <span className="swipe-hint like">Çalışacağım →</span>
+                        <span className="swipe-hint skip">← Know it / Skip</span>
+                        <span className="swipe-hint like">Will Study →</span>
                     </div>
 
                     {/* Stack: render current + next behind it */}
@@ -121,7 +121,7 @@ export default function SwipePage() {
                             aria-label="Skip topic"
                         >
                             <span className="swipe-btn-icon">✗</span>
-                            <span>Geç</span>
+                            <span>Skip</span>
                         </button>
                         <button
                             id="btn-like"
@@ -129,12 +129,12 @@ export default function SwipePage() {
                             onClick={() => handleSwipe('right')}
                             aria-label="Study this topic"
                         >
-                            <span>Çalış</span>
+                            <span>Study</span>
                             <span className="swipe-btn-icon">✓</span>
                         </button>
                     </div>
 
-                    <p className="swipe-keyboard-hint">← → tuşları da kullanabilirsin</p>
+                    <p className="swipe-keyboard-hint">You can also use ← → arrow keys</p>
                 </div>
             ) : (
                 /* Done — show confirm screen inline */
@@ -152,7 +152,7 @@ export default function SwipePage() {
                     key={`${lastAction}-${currentIndex}`}
                     className={`swipe-toast swipe-toast-${lastAction}`}
                 >
-                    {lastAction === 'like' ? '✓ Eklendi' : '✗ Geçildi'}
+                    {lastAction === 'like' ? '✓ Added' : '✗ Skipped'}
                 </div>
             )}
         </div>
@@ -164,10 +164,10 @@ function FinishedView({ liked, skipped, deckId, navigate }) {
         return (
             <div className="swipe-finished animate-fade-in">
                 <div className="swipe-finished-icon">😅</div>
-                <h2>Hiç konu seçmedin!</h2>
-                <p>En az bir konuyu sağa kaydırman lazım ki çalışabilesin.</p>
+                <h2>No topics selected!</h2>
+                <p>You need to swipe at least one topic right to study it.</p>
                 <button className="btn btn-primary mt-lg" onClick={() => window.location.reload()}>
-                    Tekrar Başla
+                    Start Over
                 </button>
             </div>
         );
@@ -180,22 +180,22 @@ function FinishedView({ liked, skipped, deckId, navigate }) {
     return (
         <div className="swipe-finished animate-fade-in">
             <div className="swipe-finished-icon">🎯</div>
-            <h2>Seçim Tamamlandı!</h2>
+            <h2>Selection Complete!</h2>
             <p>
-                <strong className="text-success">{liked.length} konu</strong> seçtin,{' '}
-                <strong className="text-muted">{skipped.length} konuyu</strong> geçtin.
+                <strong className="text-success">{liked.length} topics</strong> selected,{' '}
+                <strong className="text-muted">{skipped.length} topics</strong> skipped.
             </p>
 
             <div className="swipe-finished-summary">
                 <div className="swipe-finished-col liked">
-                    <h4>✓ Çalışacakların</h4>
+                    <h4>✓ To Study</h4>
                     <ul>
                         {liked.map(t => <li key={t.id}>{t.topic}</li>)}
                     </ul>
                 </div>
                 {skipped.length > 0 && (
                     <div className="swipe-finished-col skipped">
-                        <h4>✗ Geçtiklerin</h4>
+                        <h4>✗ Skipped</h4>
                         <ul>
                             {skipped.map(t => <li key={t.id}>{t.topic}</li>)}
                         </ul>
@@ -208,14 +208,14 @@ function FinishedView({ liked, skipped, deckId, navigate }) {
                     className="btn btn-ghost"
                     onClick={() => window.location.reload()}
                 >
-                    ↺ Yeniden Seç
+                    ↺ Reselect
                 </button>
                 <button
                     id="start-study-btn"
                     className="btn btn-primary btn-lg"
                     onClick={() => navigate(`/study/${deckId}`)}
                 >
-                    🚀 Çalışmaya Başla!
+                    🚀 Start Studying!
                 </button>
             </div>
         </div>

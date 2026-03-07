@@ -41,12 +41,12 @@ export default function ImportModal({ onClose, onImported }) {
             const parsed = JSON.parse(text);
             if (!Array.isArray(parsed)) {
                 setIsValid(false);
-                setError('JSON bir dizi (array) olmalı: [ ... ]');
+                setError('JSON must be an array: [ ... ]');
                 return;
             }
             if (parsed.length === 0) {
                 setIsValid(false);
-                setError('JSON dizisi boş olamaz.');
+                setError('JSON array cannot be empty.');
                 return;
             }
             const missing = parsed.findIndex(
@@ -54,14 +54,14 @@ export default function ImportModal({ onClose, onImported }) {
             );
             if (missing !== -1) {
                 setIsValid(false);
-                setError(`Topic ${missing + 1} eksik alan içeriyor. Her konu "topic", "summary_points" ve "flashcards" içermeli.`);
+                setError(`Topic ${missing + 1} is missing fields. Each topic must include "topic", "summary_points" and "flashcards".`);
                 return;
             }
             setIsValid(true);
             setError('');
         } catch {
             setIsValid(false);
-            setError('Geçersiz JSON formatı. Sözdizimini kontrol et.');
+            setError('Invalid JSON format. Check syntax.');
         }
     };
 
@@ -78,11 +78,11 @@ export default function ImportModal({ onClose, onImported }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!deckName.trim()) {
-            setError('Lütfen bir deck adı gir.');
+            setError('Please enter a deck name.');
             return;
         }
         if (!isValid) {
-            setError('Lütfen önce geçerli bir JSON yapıştır.');
+            setError('Please paste a valid JSON first.');
             return;
         }
         setSaving(true);
@@ -91,7 +91,7 @@ export default function ImportModal({ onClose, onImported }) {
             const id = await saveDeck(deckName.trim(), topics);
             onImported(id);
         } catch {
-            setError('Kaydetme sırasında hata oluştu.');
+            setError('Error occurred while saving.');
             setSaving(false);
         }
     };
@@ -157,20 +157,20 @@ export default function ImportModal({ onClose, onImported }) {
                         {error && <p className="import-error">{error}</p>}
                         {isValid && !error && (
                             <p className="import-success">
-                                ✓ JSON geçerli! {JSON.parse(jsonText).length} konu bulundu.
+                                ✓ JSON is valid! {JSON.parse(jsonText).length} topics found.
                             </p>
                         )}
                     </div>
 
                     {/* Tips */}
                     <div className="import-tips">
-                        <p>💡 <strong>Nasıl kullanılır?</strong> Ders notlarını alıp <a href="/prompt" onClick={onClose}>Magic Prompt</a>'u kullan → Gemini/ChatGPT'ye yapıştır → Çıktıyı buraya yapıştır.</p>
+                        <p>💡 <strong>How to use:</strong> Take your study notes → Use <a href="/prompt" onClick={onClose}>Magic Prompt</a> → Paste into Gemini/ChatGPT → Paste the output here.</p>
                     </div>
 
                     {/* Actions */}
                     <div className="import-actions">
                         <button type="button" className="btn btn-ghost" onClick={onClose}>
-                            İptal
+                            Cancel
                         </button>
                         <button
                             type="submit"
@@ -178,7 +178,7 @@ export default function ImportModal({ onClose, onImported }) {
                             className="btn btn-primary"
                             disabled={!isValid || !deckName.trim() || saving}
                         >
-                            {saving ? 'Kaydediliyor...' : '🚀 Import & Swipe'}
+                            {saving ? 'Saving...' : '🚀 Import & Swipe'}
                         </button>
                     </div>
                 </form>

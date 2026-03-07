@@ -20,7 +20,7 @@ export default function Home() {
 
     const handleDelete = async (e, id) => {
         e.stopPropagation();
-        if (!confirm('Bu dersi silmek istediğinden emin misin?')) return;
+        if (!confirm('Are you sure you want to delete this deck?')) return;
         await deleteDeck(id);
         loadDecks();
     };
