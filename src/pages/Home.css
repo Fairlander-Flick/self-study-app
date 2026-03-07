@@ -265,6 +265,14 @@
 .deck-card-footer {
     border-top: 1px solid var(--clr-border);
     padding: var(--space-sm) var(--space-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deck-best-score {
+    font-size: var(--text-xs);
+    color: var(--clr-text-muted);
 }
 
 .deck-study-hint {

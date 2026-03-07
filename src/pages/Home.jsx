@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllDecks, deleteDeck } from '../services/db.js';
+import { getAllDecks, deleteDeck, getBestScore } from '../services/db.js';
 import ImportModal from '../components/ImportModal.jsx';
 import './Home.css';
 
@@ -11,8 +11,13 @@ export default function Home() {
     const navigate = useNavigate();
 
     const loadDecks = async () => {
-        const all = await getAllDecks();
-        setDecks(all.reverse());
+        const allWithScores = await Promise.all(
+            all.reverse().map(async deck => {
+                const bestScore = await getBestScore(deck.id);
+                return { ...deck, bestScore };
+            })
+        );
+        setDecks(allWithScores);
         setLoading(false);
     };
 
@@ -141,6 +146,12 @@ function DeckCard({ deck, index, onStudy, onDelete }) {
     ];
     const accent = colors[index % colors.length];
 
+    const bestScore = deck.bestScore;
+    let scoreColor = 'var(--clr-text-muted)';
+    if (bestScore >= 90) scoreColor = 'var(--clr-success)';
+    else if (bestScore >= 70) scoreColor = 'var(--clr-primary)';
+    else if (bestScore !== null) scoreColor = '#F59E0B';
+
     return (
         <div
             className="deck-card card animate-fade-in"
@@ -173,6 +184,13 @@ function DeckCard({ deck, index, onStudy, onDelete }) {
                 </div>
             </div>
             <div className="deck-card-footer">
+                {bestScore !== null ? (
+                    <span className="deck-best-score" style={{ color: scoreColor }}>
+                        <strong>{bestScore}%</strong> Best Score
+                    </span>
+                ) : (
+                    <span className="deck-best-score">Not studied yet</span>
+                )}
                 <span className="deck-study-hint">Tap to study →</span>
             </div>
         </div>
