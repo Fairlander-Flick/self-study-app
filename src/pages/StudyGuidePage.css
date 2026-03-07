@@ -90,7 +90,7 @@
 }
 
 .guide-lecture-text p {
-    margin-bottom: var(--space-md);
+    margin-bottom: 20px;
 }
 
 .guide-no-text {
