@@ -17,11 +17,11 @@ Please act as an expert tutor and instructional designer. Extract the key inform
 Follow these strict rules for the JSON output:
 1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
 2. The root must be a JSON Array [ ... ].
-3. Group the information into logical "topics" based on the sources. CRITICAL: Be extremely thorough. Create a high volume of topics (MINIMUM 15-30 topics) to ensure absolutely no key information is left out. Break down large subjects into granular, bite-sized topics.
+3. Group the information into logical "topics". CRITICAL VOLUME RULE: Because there are many pages/slides of sources, you MUST create AT LEAST 4 to 10 granular topics PER LECTURE SOURCE. The total output should naturally reach 20-40 topics to ensure absolute granular mastery. Do not summarize entire lectures into one topic! Break them down.
 4. For each topic, provide:
    - "id": A unique string (e.g., "1", "2").
    - "topic": A short title for this group of information.
-   - "lecture_text": A comprehensive, well-written, 2-3 paragraph study guide explaining the topic context fully (Markdown supported). CRITICAL: This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
+   - "lecture_text": A comprehensive, well-structured, 3-4 paragraph study guide. CRITICAL: Use Markdown (e.g., **bold**, *italics*, bullet points) and liberally use relevant EMOJIS (🧠, 💡, ⚠️, etc.) to make it highly engaging and visually broken down. This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": An array of strings. Maximum 4 bullet points.
    - "flashcards": An array of objects. Mix 3 types of flashcards. CRITICAL: Provide AT LEAST 5 flashcards per topic (ideally 5-8) to ensure full coverage:
       * Type 1 (Basic/Standard): { "type": "basic", "question": "...", "answer": "..." }

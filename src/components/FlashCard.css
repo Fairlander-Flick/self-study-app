@@ -1,7 +1,7 @@
 .flashcard-container {
     width: 100%;
-    max-width: 500px;
-    height: 500px;
+    max-width: 550px;
+    height: 600px;
     perspective: 1600px;
 }
 
@@ -62,18 +62,19 @@
 .flashcard-options {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
 }
 
 .flashcard-option-item {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 10px 14px;
+    padding: 12px 16px;
     border-radius: var(--radius-md);
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     color: var(--clr-text-secondary);
     text-align: left;
+    transition: all 0.2s ease;
 }
 
 .flashcard-flip-btn {

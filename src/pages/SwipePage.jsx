@@ -221,12 +221,12 @@ ${topicText}
 Generate a deep-dive flashcard deck for me based ONLY on these exact points. Follow these strict rules for the JSON output:
 1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
 2. The root must be a JSON Array [ ... ].
-3. For each topic above, provide granular sub-topics (create a MINIMUM of 15-30 granular topics across the whole output) ensuring absolutely no detail is missed:
+3. For each topic above, provide granular sub-topics (create AT LEAST 4 to 10 granular topics PER LECTURE SOURCE, reaching 20-40 total for deep mastery) ensuring absolutely no detail is missed:
    - "id": A unique string.
    - "topic": The exact topic name provided above.
-   - "lecture_text": A comprehensive 2-3 paragraph deep-dive study guide explaining the specifics of these points (Markdown supported). CRITICAL: This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
+   - "lecture_text": A comprehensive 3-4 paragraph deep-dive study guide. CRITICAL: Use Markdown (e.g., **bold**, *italics*, bullet points) and liberally use relevant EMOJIS (🧠, 💡, ⚠️, etc.) to make it highly engaging and visually broken down. This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": The exact points provided above.
-   - "flashcards": An array of objects. Create AT LEAST 5 (ideally 5-8) thought-provoking flashcards per topic that deeply test understanding of these specific points. Use a mix of:
+   - "flashcards": An array of objects. Create AT LEAST 5 (ideally 5-9) thought-provoking flashcards per topic that deeply test understanding of these specific points. Use a mix of:
       * Basic: { "type": "basic", "question": "...", "answer": "..." }
       * Multiple Choice (1 correct): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } (ALWAYS exactly 5 options)
       * Multiple Correct (Choose all that apply): { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] } (ALWAYS exactly 5 options)
