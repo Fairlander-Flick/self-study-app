@@ -21,7 +21,7 @@ Follow these strict rules for the JSON output:
 4. For each topic, provide:
    - "id": A unique string (e.g., "1", "2").
    - "topic": A short title for this group of information.
-   - "lecture_text": A comprehensive, well-written, 2-3 paragraph study guide explaining the topic context fully (Markdown supported).
+   - "lecture_text": A comprehensive, well-written, 2-3 paragraph study guide explaining the topic context fully (Markdown supported). CRITICAL: This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": An array of strings. Maximum 4 bullet points.
    - "flashcards": An array of objects. Mix 3 types of flashcards (create 3-5 total per topic):
       * Type 1 (Basic/Standard): { "type": "basic", "question": "...", "answer": "..." }

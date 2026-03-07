@@ -194,7 +194,7 @@ Generate a deep-dive flashcard deck for me based ONLY on these exact points. Fol
 3. For each topic above, provide:
    - "id": A unique string.
    - "topic": The exact topic name provided above.
-   - "lecture_text": A comprehensive 2-3 paragraph deep-dive study guide explaining the specifics of these points (Markdown supported).
+   - "lecture_text": A comprehensive 2-3 paragraph deep-dive study guide explaining the specifics of these points (Markdown supported). CRITICAL: This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": The exact points provided above.
    - "flashcards": An array of objects. Create 3-5 thought-provoking flashcards per topic that deeply test understanding of these specific points. Use a mix of:
       * Basic: { "type": "basic", "question": "...", "answer": "..." }
