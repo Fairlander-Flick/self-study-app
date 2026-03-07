@@ -47,7 +47,15 @@ export default function FlashCard({ card, onAnswer }) {
                 <div className="flashcard-face flashcard-back">
                     <div className="flashcard-topic">{card.topicName}</div>
                     <div className="flashcard-answer">
-                        <p>{card.answer}</p>
+                        {Array.isArray(card.answer) ? (
+                            <div className="flashcard-answer-list">
+                                {card.answer.map((ans, i) => (
+                                    <div key={i} className="flashcard-answer-item">{ans}</div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>{card.answer}</p>
+                        )}
                     </div>
                     <div className="flashcard-actions">
                         <button

@@ -197,7 +197,8 @@ Generate a deep-dive flashcard deck for me based ONLY on these exact points. Fol
    - "summary_points": The exact points provided above.
    - "flashcards": An array of objects. Create 3-5 thought-provoking flashcards per topic that deeply test understanding of these specific points. Use a mix of:
       * Basic: { "type": "basic", "question": "...", "answer": "..." }
-      * Multiple Choice: { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } (ALWAYS exactly 5 options)
+      * Multiple Choice (1 correct): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } (ALWAYS exactly 5 options)
+      * Multiple Correct (Choose all that apply): { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] } (ALWAYS exactly 5 options)
 4. Make questions thought-provoking but concise.
 5. Make answers clear and easy to read quickly.
 6. Output Language: Keep the language of the output the same as the points provided above.
@@ -210,7 +211,8 @@ Example expected format:
     "summary_points": ["Point 1", "Point 2"],
     "flashcards": [
       { "type": "basic", "question": "Q?", "answer": "A." },
-      { "type": "multiple_choice", "question": "Q?", "options": ["A) 1", "B) 2", "C) 3", "D) 4", "E) 5"], "answer": "C) 3" }
+      { "type": "multiple_choice", "question": "Q?", "options": ["A) 1", "B) 2", "C) 3", "D) 4", "E) 5"], "answer": "C) 3" },
+      { "type": "multiple_correct", "question": "Q (Choose all)?", "options": ["A) 1", "B) 2", "C) 3", "D) 4", "E) 5"], "answer": ["A) 1", "D) 4"] }
     ]
   }
 ]`;

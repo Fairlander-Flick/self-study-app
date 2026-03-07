@@ -30,9 +30,20 @@ const SAMPLE_JSON = `[
         "answer": "C) Mitochondria"
       },
       {
-        "type": "basic",
-        "question": "Where is the genetic material stored in a eukaryotic cell?",
-        "answer": "In the nucleus."
+        "type": "multiple_correct",
+        "question": "Which of the following are true about eukaryotic cells? (Choose all that apply)",
+        "options": [
+          "A) They have a nucleus",
+          "B) They are always single-celled",
+          "C) They contain membrane-bound organelles",
+          "D) They do not have DNA",
+          "E) Their DNA is linear"
+        ],
+        "answer": [
+          "A) They have a nucleus",
+          "C) They contain membrane-bound organelles",
+          "E) Their DNA is linear"
+        ]
       }
     ]
   },
@@ -46,16 +57,20 @@ const SAMPLE_JSON = `[
     ],
     "flashcards": [
       {
-        "type": "multiple_choice",
-        "question": "What are the three main inputs required for photosynthesis?",
+        "type": "multiple_correct",
+        "question": "What are the required inputs for photosynthesis? (Choose all that apply)",
         "options": [
-          "A) Oxygen, Glucose, and Sunlight",
-          "B) Carbon Dioxide, Water, and Sunlight",
-          "C) Nitrogen, Water, and Heat",
-          "D) Soil, Carbon Dioxide, and Moonlight",
-          "E) Glucose, Water, and Carbon Dioxide"
+          "A) Oxygen",
+          "B) Carbon Dioxide",
+          "C) Water",
+          "D) Glucose",
+          "E) Sunlight"
         ],
-        "answer": "B) Carbon Dioxide, Water, and Sunlight"
+        "answer": [
+          "B) Carbon Dioxide",
+          "C) Water",
+          "E) Sunlight"
+        ]
       },
       {
         "type": "basic",

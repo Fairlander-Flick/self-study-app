@@ -22,10 +22,11 @@ Follow these strict rules for the JSON output:
    - "id": A unique string (e.g., "1", "2").
    - "topic": A short title for this group of information.
    - "summary_points": An array of strings. Maximum 4 bullet points.
-   - "flashcards": An array of objects. Mix 2 types of flashcards (create 3-5 total per topic):
-      * Type 1 (Basic): { "type": "basic", "question": "...", "answer": "..." }
-      * Type 2 (Multiple Choice): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } 
-      MAKE SURE multiple choice questions ALWAYS have exactly 5 options (A, B, C, D, E).
+   - "flashcards": An array of objects. Mix 3 types of flashcards (create 3-5 total per topic):
+      * Type 1 (Basic/Standard): { "type": "basic", "question": "...", "answer": "..." }
+      * Type 2 (Multiple Choice - 1 correct): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } 
+      * Type 3 (Multiple Correct / Choose all that apply): { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] }
+      MAKE SURE multiple choice and multiple correct questions ALWAYS have exactly 5 options (A, B, C, D, E).
 5. Make questions thought-provoking but concise.
 6. Make answers clear and easy to read quickly.
 7. Output Language: Keep the language of the output the same as the sources.
@@ -49,6 +50,12 @@ Example expected format:
         "question": "Which organelle is responsible for photosynthesis?",
         "options": ["A) Nucleus", "B) Ribosome", "C) Chloroplast", "D) Mitochondria", "E) Endoplasmic Reticulum"],
         "answer": "C) Chloroplast"
+      },
+      {
+        "type": "multiple_correct",
+        "question": "Which of the following are REQUIRED for photosynthesis to occur? (Choose all that apply)",
+        "options": ["A) Sunlight", "B) Oxygen", "C) Water", "D) Glucose", "E) Carbon Dioxide"],
+        "answer": ["A) Sunlight", "C) Water", "E) Carbon Dioxide"]
       }
     ]
   }
