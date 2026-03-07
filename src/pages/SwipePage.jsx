@@ -143,6 +143,7 @@ export default function SwipePage() {
                     skipped={skipped}
                     deckId={id}
                     navigate={navigate}
+                    deckName={deck?.name}
                 />
             )}
 
@@ -159,7 +160,84 @@ export default function SwipePage() {
     );
 }
 
-function FinishedView({ liked, skipped, deckId, navigate }) {
+function FinishedView({ liked, skipped, deckId, navigate, deckName }) {
+    const [editedTopics, setEditedTopics] = useState(liked);
+    const [showPromptModal, setShowPromptModal] = useState(false);
+    const [magicPrompt, setMagicPrompt] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    useEffect(() => {
+        if (editedTopics.length > 0) {
+            sessionStorage.setItem(`swipe_liked_${deckId}`, JSON.stringify(editedTopics));
+            sessionStorage.setItem(`swipe_skipped_${deckId}`, JSON.stringify(skipped));
+        }
+    }, [editedTopics, skipped, deckId]);
+
+    const handlePointChange = (topicIndex, pointIndex, value) => {
+        const updated = [...editedTopics];
+        updated[topicIndex].summary_points[pointIndex] = value;
+        setEditedTopics(updated);
+    };
+
+    const handleGenerateDeepDive = () => {
+        const topicText = editedTopics.map(t => {
+            return `Topic: ${t.topic}\nPoints to cover:\n` + t.summary_points.map(p => `- ${p}`).join('\n');
+        }).join('\n\n');
+
+        const prompt = `I am studying "${deckName || 'this subject'}" and I want to deeply study the following specific topics and points. Please act as an expert tutor and instructional designer.
+
+${topicText}
+
+Generate a deep-dive flashcard deck for me based ONLY on these exact points. Follow these strict rules for the JSON output:
+1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
+2. The root must be a JSON Array [ ... ].
+3. For each topic above, provide:
+   - "id": A unique string.
+   - "topic": The exact topic name provided above.
+   - "summary_points": The exact points provided above.
+   - "flashcards": An array of objects, containing "question" and "answer". Create 3-5 thought-provoking flashcards per topic that deeply test understanding of these specific points.
+4. Make questions thought-provoking but concise.
+5. Make answers clear and easy to read quickly.
+6. Output Language: Keep the language of the output the same as the points provided above.
+
+Example expected format:
+[
+  {
+    "id": "1",
+    "topic": "Example Topic",
+    "summary_points": ["Point 1", "Point 2"],
+    "flashcards": [
+      { "question": "Q?", "answer": "A." }
+    ]
+  }
+]`;
+        setMagicPrompt(prompt);
+        setShowPromptModal(true);
+    };
+
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(magicPrompt);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Copy failed', err);
+            const textArea = document.createElement("textarea");
+            textArea.value = magicPrompt;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            } catch (e) {
+                console.error('Fallback copy failed', e);
+            }
+            document.body.removeChild(textArea);
+        }
+    };
+
     if (liked.length === 0) {
         return (
             <div className="swipe-finished animate-fade-in">
@@ -173,37 +251,36 @@ function FinishedView({ liked, skipped, deckId, navigate }) {
         );
     }
 
-    // Save selected topics to sessionStorage for the confirm page
-    sessionStorage.setItem(`swipe_liked_${deckId}`, JSON.stringify(liked));
-    sessionStorage.setItem(`swipe_skipped_${deckId}`, JSON.stringify(skipped));
-
     return (
         <div className="swipe-finished animate-fade-in">
-            <div className="swipe-finished-icon">🎯</div>
-            <h2>Selection Complete!</h2>
-            <p>
-                <strong className="text-success">{liked.length} topics</strong> selected,{' '}
-                <strong className="text-muted">{skipped.length} topics</strong> skipped.
-            </p>
-
-            <div className="swipe-finished-summary">
-                <div className="swipe-finished-col liked">
-                    <h4>✓ To Study</h4>
-                    <ul>
-                        {liked.map(t => <li key={t.id}>{t.topic}</li>)}
-                    </ul>
-                </div>
-                {skipped.length > 0 && (
-                    <div className="swipe-finished-col skipped">
-                        <h4>✗ Skipped</h4>
-                        <ul>
-                            {skipped.map(t => <li key={t.id}>{t.topic}</li>)}
-                        </ul>
-                    </div>
-                )}
+            <div className="swipe-finished-header">
+                <div className="swipe-finished-icon">🎯</div>
+                <h2>Selection Complete!</h2>
+                <p>
+                    <strong className="text-success">{liked.length} topics</strong> selected,{' '}
+                    <strong className="text-muted">{skipped.length} topics</strong> skipped.
+                </p>
+                <p className="swipe-finished-subtitle">You can edit the points below to fine-tune your focus.</p>
             </div>
 
-            <div className="swipe-finished-actions">
+            <div className="swipe-finished-editable-list">
+                {editedTopics.map((t, tIndex) => (
+                    <div key={t.id} className="editable-topic-card">
+                        <h4>{t.topic}</h4>
+                        {t.summary_points.map((p, pIndex) => (
+                            <input
+                                key={pIndex}
+                                type="text"
+                                className="input point-input"
+                                value={p}
+                                onChange={(e) => handlePointChange(tIndex, pIndex, e.target.value)}
+                            />
+                        ))}
+                    </div>
+                ))}
+            </div>
+
+            <div className="swipe-finished-actions-row">
                 <button
                     className="btn btn-ghost"
                     onClick={() => window.location.reload()}
@@ -211,13 +288,57 @@ function FinishedView({ liked, skipped, deckId, navigate }) {
                     ↺ Reselect
                 </button>
                 <button
+                    className="btn btn-primary btn-outline"
+                    onClick={handleGenerateDeepDive}
+                >
+                    ✨ Deep-Dive Prompt
+                </button>
+                <button
                     id="start-study-btn"
-                    className="btn btn-primary btn-lg"
+                    className="btn btn-primary"
                     onClick={() => navigate(`/study/${deckId}`)}
                 >
                     🚀 Start Studying!
                 </button>
             </div>
+
+            {/* Prompt Modal */}
+            {showPromptModal && (
+                <div className="modal-overlay" onClick={() => setShowPromptModal(false)}>
+                    <div className="modal magic-prompt-modal" onClick={e => e.stopPropagation()}>
+                        <div className="import-modal-header">
+                            <div>
+                                <h2 className="import-modal-title">Magic Deep-Dive Prompt</h2>
+                                <p className="import-modal-subtitle">Copy this to NotebookLM/ChatGPT!</p>
+                            </div>
+                            <button className="btn btn-ghost btn-icon" onClick={() => setShowPromptModal(false)}>✕</button>
+                        </div>
+                        <div className="import-field">
+                            <textarea
+                                className="input textarea-large"
+                                value={magicPrompt}
+                                readOnly
+                                style={{ minHeight: '250px' }}
+                            />
+                        </div>
+                        <div className="prompt-actions" style={{ marginTop: '16px', display: 'flex', gap: '12px' }}>
+                            <button
+                                className={`btn ${copied ? 'btn-success' : 'btn-primary'}`}
+                                onClick={handleCopy}
+                                style={{ flex: 1 }}
+                            >
+                                {copied ? '✓ Copied!' : '📋 Copy Prompt'}
+                            </button>
+                            <button className="btn btn-ghost" onClick={() => setShowPromptModal(false)}>Close</button>
+                        </div>
+                        {copied && (
+                            <p className="import-success" style={{ marginTop: '12px', fontSize: '13px' }}>
+                                Next: Paste this to AI, get new JSON, and create a new deep-dive deck!
+                            </p>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
