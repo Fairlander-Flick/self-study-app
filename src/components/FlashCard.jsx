@@ -25,8 +25,15 @@ export default function FlashCard({ card, onAnswer }) {
                 {/* Front */}
                 <div className="flashcard-face flashcard-front">
                     <div className="flashcard-topic">{card.topicName}</div>
-                    <div className="flashcard-question">
+                    <div className="flashcard-question-area">
                         <h3>{card.question}</h3>
+                        {card.options && card.options.length > 0 && (
+                            <div className="flashcard-options">
+                                {card.options.map((opt, i) => (
+                                    <div key={i} className="flashcard-option-item">{opt}</div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <button
                         className="btn btn-primary flashcard-flip-btn"

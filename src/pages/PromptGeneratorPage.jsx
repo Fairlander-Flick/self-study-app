@@ -21,8 +21,11 @@ Follow these strict rules for the JSON output:
 4. For each topic, provide:
    - "id": A unique string (e.g., "1", "2").
    - "topic": A short title for this group of information.
-   - "summary_points": An array of strings. Maximum 4 bullet points summarizing the key takeaways for this topic.
-   - "flashcards": An array of objects, containing "question" and "answer". Create 3-5 flashcards that test the user on the summary points.
+   - "summary_points": An array of strings. Maximum 4 bullet points.
+   - "flashcards": An array of objects. Mix 2 types of flashcards (create 3-5 total per topic):
+      * Type 1 (Basic): { "type": "basic", "question": "...", "answer": "..." }
+      * Type 2 (Multiple Choice): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } 
+      MAKE SURE multiple choice questions ALWAYS have exactly 5 options (A, B, C, D, E).
 5. Make questions thought-provoking but concise.
 6. Make answers clear and easy to read quickly.
 7. Output Language: Keep the language of the output the same as the sources.
@@ -33,13 +36,19 @@ Example expected format:
     "id": "1",
     "topic": "Photosynthesis Basics",
     "summary_points": [
-      "Plants use sunlight to make food.",
-      "Requires water and carbon dioxide."
+      "Plants use sunlight to make food."
     ],
     "flashcards": [
       {
+        "type": "basic",
         "question": "What are the two main inputs for photosynthesis?",
         "answer": "Water and carbon dioxide."
+      },
+      {
+        "type": "multiple_choice",
+        "question": "Which organelle is responsible for photosynthesis?",
+        "options": ["A) Nucleus", "B) Ribosome", "C) Chloroplast", "D) Mitochondria", "E) Endoplasmic Reticulum"],
+        "answer": "C) Chloroplast"
       }
     ]
   }

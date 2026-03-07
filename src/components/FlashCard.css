@@ -42,18 +42,38 @@
     letter-spacing: 0.1em;
 }
 
-.flashcard-question {
+.flashcard-question-area {
     flex: 1;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    text-align: center;
+    overflow-y: auto;
+    padding-bottom: var(--space-md);
 }
 
-.flashcard-question h3 {
+.flashcard-question-area h3 {
     font-size: var(--text-2xl);
     color: var(--clr-text-primary);
     line-height: 1.4;
+    text-align: center;
+    margin-bottom: var(--space-md);
+}
+
+.flashcard-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.flashcard-option-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--clr-text-secondary);
+    text-align: left;
 }
 
 .flashcard-flip-btn {
