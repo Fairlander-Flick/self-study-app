@@ -195,6 +195,8 @@ function FinishedView({ liked, skipped, deckId, navigate, deckName }) {
     const [showPromptModal, setShowPromptModal] = useState(false);
     const [magicPrompt, setMagicPrompt] = useState('');
     const [copied, setCopied] = useState(false);
+    const [qPerSource, setQPerSource] = useState('10');
+    const [totalQ, setTotalQ] = useState('100');
 
     useEffect(() => {
         if (editedTopics.length > 0) {
@@ -221,12 +223,12 @@ ${topicText}
 Generate a deep-dive flashcard deck for me based ONLY on these exact points. Follow these strict rules for the JSON output:
 1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
 2. The root must be a JSON Array [ ... ].
-3. For each topic above, provide granular sub-topics (create AT LEAST 4 to 10 granular topics PER LECTURE SOURCE, reaching 20-40 total for deep mastery) ensuring absolutely no detail is missed:
+3. For each topic above, provide granular sub-topics (CRITICAL VOLUME RULE: create AT LEAST ${qPerSource} granular topics PER LECTURE SOURCE, reaching an absolute minimum of ${totalQ} total flashcards across all topics for absolute deep mastery. Whichever number is higher, fulfill that!) ensuring absolutely no detail is missed:
    - "id": A unique string.
    - "topic": The exact topic name provided above.
    - "lecture_text": A comprehensive 3-4 paragraph deep-dive study guide. CRITICAL: Use Markdown (e.g., **bold**, *italics*, bullet points) and liberally use relevant EMOJIS (🧠, 💡, ⚠️, etc.) to make it highly engaging and visually broken down. This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": The exact points provided above.
-   - "flashcards": An array of objects. Create AT LEAST 5 (ideally 5-9) thought-provoking flashcards per topic that deeply test understanding of these specific points. Use a mix of:
+   - "flashcards": An array of objects. Mix 3 types of flashcards. CRITICAL: Create AT LEAST 5 (ideally 5-10) thought-provoking flashcards per topic that deeply test understanding of these specific points, to help reach the total minimum of ${totalQ} flashcards. Use a mix of:
       * Basic: { "type": "basic", "question": "...", "answer": "..." }
       * Multiple Choice (1 correct): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } (ALWAYS exactly 5 options)
       * Multiple Correct (Choose all that apply): { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] } (ALWAYS exactly 5 options)
@@ -317,7 +319,37 @@ Example expected format:
                 ))}
             </div>
 
-            <div className="swipe-finished-actions-row">
+            <div className="swipe-finished-volume-controls" style={{ marginTop: '24px', background: 'var(--clr-bg-elevated)', padding: '16px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--clr-border)' }}>
+                <h4 style={{ marginBottom: '12px', fontSize: '1rem', color: 'var(--clr-primary-light)' }}>Deep-Dive Prompt Settings</h4>
+                <div style={{ display: 'flex', gap: '16px' }}>
+                    <div style={{ flex: 1 }}>
+                        <label htmlFor="dd-q-per-source" style={{ marginBottom: '8px', display: 'block', fontWeight: '600', fontSize: '13px' }}>Topics to extract per slide/page</label>
+                        <input
+                            id="dd-q-per-source"
+                            className="input"
+                            type="number"
+                            min="1"
+                            value={qPerSource}
+                            onChange={(e) => setQPerSource(e.target.value)}
+                            style={{ padding: '8px' }}
+                        />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <label htmlFor="dd-total-q" style={{ marginBottom: '8px', display: 'block', fontWeight: '600', fontSize: '13px' }}>Minimum Total Flashcards</label>
+                        <input
+                            id="dd-total-q"
+                            className="input"
+                            type="number"
+                            min="10"
+                            value={totalQ}
+                            onChange={(e) => setTotalQ(e.target.value)}
+                            style={{ padding: '8px' }}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="swipe-finished-actions-row" style={{ marginTop: '24px' }}>
                 <button
                     className="btn btn-ghost"
                     onClick={() => window.location.reload()}

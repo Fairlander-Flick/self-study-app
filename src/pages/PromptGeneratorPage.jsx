@@ -5,9 +5,11 @@ import './PromptGeneratorPage.css';
 export default function PromptGeneratorPage() {
     const navigate = useNavigate();
     const [topic, setTopic] = useState('');
+    const [qPerSource, setQPerSource] = useState('10');
+    const [totalQ, setTotalQ] = useState('100');
     const [copied, setCopied] = useState(false);
 
-    const isFormValid = topic.trim().length > 0;
+    const isFormValid = topic.trim().length > 0 && qPerSource > 0 && totalQ > 0;
 
     const generatePrompt = () => {
         return `I am studying "${topic.trim()}" and I need you to analyze all the attached sources in this NotebookLM project.
@@ -17,13 +19,13 @@ Please act as an expert tutor and instructional designer. Extract the key inform
 Follow these strict rules for the JSON output:
 1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
 2. The root must be a JSON Array [ ... ].
-3. Group the information into logical "topics". CRITICAL VOLUME RULE: Because there are many pages/slides of sources, you MUST create AT LEAST 4 to 10 granular topics PER LECTURE SOURCE. The total output should naturally reach 20-40 topics to ensure absolute granular mastery. Do not summarize entire lectures into one topic! Break them down.
+3. Group the information into logical "topics". CRITICAL VOLUME RULE: Because there are many pages/slides of sources, you MUST create AT LEAST ${qPerSource} granular topics PER LECTURE SOURCE/PAGE. The total output MUST reach an absolute minimum of ${totalQ} total flashcards across all topics to ensure absolute granular mastery. Whichever number is higher (topics per page vs total flashcards), fulfill that! Do not summarize entire lectures into one topic! Break them down.
 4. For each topic, provide:
    - "id": A unique string (e.g., "1", "2").
    - "topic": A short title for this group of information.
    - "lecture_text": A comprehensive, well-structured, 3-4 paragraph study guide. CRITICAL: Use Markdown (e.g., **bold**, *italics*, bullet points) and liberally use relevant EMOJIS (🧠, 💡, ⚠️, etc.) to make it highly engaging and visually broken down. This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": An array of strings. Maximum 4 bullet points.
-   - "flashcards": An array of objects. Mix 3 types of flashcards. CRITICAL: Provide AT LEAST 5 flashcards per topic (ideally 5-8) to ensure full coverage:
+   - "flashcards": An array of objects. Mix 3 types of flashcards. CRITICAL: Provide AT LEAST 5 flashcards per topic (ideally 5-10) to help reach the minimum total of ${totalQ} flashcards.
       * Type 1 (Basic/Standard): { "type": "basic", "question": "...", "answer": "..." }
       * Type 2 (Multiple Choice - 1 correct): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } 
       * Type 3 (Multiple Correct / Choose all that apply): { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] }
@@ -109,7 +111,7 @@ Example expected format:
 
                 <div className="prompt-form card">
                     <div className="form-group">
-                        <label htmlFor="topic-input">What's the name of this lesson/topic?</label>
+                        <label htmlFor="topic-input" style={{ marginBottom: '8px', display: 'block', fontWeight: '600' }}>What's the name of this lesson/topic?</label>
                         <input
                             id="topic-input"
                             className="input"
@@ -118,7 +120,33 @@ Example expected format:
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
                             autoFocus
+                            style={{ marginBottom: '16px' }}
                         />
+
+                        <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
+                            <div style={{ flex: 1 }}>
+                                <label htmlFor="q-per-source" style={{ marginBottom: '8px', display: 'block', fontWeight: '600', fontSize: '14px' }}>Topics to extract per slide/page</label>
+                                <input
+                                    id="q-per-source"
+                                    className="input"
+                                    type="number"
+                                    min="1"
+                                    value={qPerSource}
+                                    onChange={(e) => setQPerSource(e.target.value)}
+                                />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label htmlFor="total-q" style={{ marginBottom: '8px', display: 'block', fontWeight: '600', fontSize: '14px' }}>Minimum Total Flashcards</label>
+                                <input
+                                    id="total-q"
+                                    className="input"
+                                    type="number"
+                                    min="10"
+                                    value={totalQ}
+                                    onChange={(e) => setTotalQ(e.target.value)}
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     <div className="prompt-actions">
