@@ -48,7 +48,7 @@ export default function Home() {
                         Not Harder
                     </h1>
                     <p className="home-hero-desc">
-                        Import your AI-generated notes, swipe through topics, and master your material with interactive flashcards.
+                        Instead of manually sifting through questions in NotebookLM, make studying fun! Import your AI-generated notes, swipe through topics Tinder-style to filter what you want to learn, and master your material with interactive flashcards.
                     </p>
                     <button
                         id="new-deck-btn"
