@@ -11,14 +11,20 @@ export default function Home() {
     const navigate = useNavigate();
 
     const loadDecks = async () => {
-        const allWithScores = await Promise.all(
-            all.reverse().map(async deck => {
-                const bestScore = await getBestScore(deck.id);
-                return { ...deck, bestScore };
-            })
-        );
-        setDecks(allWithScores);
-        setLoading(false);
+        try {
+            const all = await getAllDecks();
+            const allWithScores = await Promise.all(
+                all.reverse().map(async deck => {
+                    const bestScore = await getBestScore(deck.id);
+                    return { ...deck, bestScore };
+                })
+            );
+            setDecks(allWithScores);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => { loadDecks(); }, []);
