@@ -28,13 +28,33 @@ export default function SwipePage() {
     // keyboard support
     useEffect(() => {
         const onKey = (e) => {
-            if (animating || currentIndex >= topics.length) return;
-            if (e.key === 'ArrowRight') handleSwipe('right');
-            if (e.key === 'ArrowLeft') handleSwipe('left');
+            if (animating) return;
+            if (currentIndex < topics.length) {
+                if (e.key === 'ArrowRight') handleSwipe('right');
+                if (e.key === 'ArrowLeft') handleSwipe('left');
+            }
+            if (e.key === 'ArrowUp' || e.key === 'Backspace') handleUndo();
         };
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
     }, [currentIndex, topics, animating]);
+
+    const handleUndo = () => {
+        if (animating || currentIndex === 0) return;
+        setAnimating(true);
+        const prevCard = topics[currentIndex - 1];
+
+        // Check where this card went
+        if (liked.length > 0 && liked[liked.length - 1].id === prevCard.id) {
+            setLiked(prev => prev.slice(0, -1));
+        } else if (skipped.length > 0 && skipped[skipped.length - 1].id === prevCard.id) {
+            setSkipped(prev => prev.slice(0, -1));
+        }
+
+        setLastAction('undo');
+        setCurrentIndex(prev => prev - 1);
+        setTimeout(() => setAnimating(false), 200); // slightly faster animation for undo
+    };
 
     const handleSwipe = (direction) => {
         if (animating || currentIndex >= topics.length) return;
@@ -124,6 +144,16 @@ export default function SwipePage() {
                             <span>Skip</span>
                         </button>
                         <button
+                            className="swipe-btn swipe-btn-undo"
+                            onClick={handleUndo}
+                            disabled={currentIndex === 0 || animating}
+                            aria-label="Undo last swipe"
+                            style={{ opacity: currentIndex === 0 ? 0.3 : 1, width: '56px', height: '56px', marginTop: '16px' }}
+                        >
+                            <span className="swipe-btn-icon" style={{ fontSize: '18px' }}>↺</span>
+                            <span>Undo</span>
+                        </button>
+                        <button
                             id="btn-like"
                             className="swipe-btn swipe-btn-like"
                             onClick={() => handleSwipe('right')}
@@ -153,7 +183,7 @@ export default function SwipePage() {
                     key={`${lastAction}-${currentIndex}`}
                     className={`swipe-toast swipe-toast-${lastAction}`}
                 >
-                    {lastAction === 'like' ? '✓ Added' : '✗ Skipped'}
+                    {lastAction === 'like' ? '✓ Added' : lastAction === 'skip' ? '✗ Skipped' : '↺ Undone'}
                 </div>
             )}
         </div>
