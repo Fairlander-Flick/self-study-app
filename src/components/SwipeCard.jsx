@@ -38,66 +38,73 @@ export default function SwipeCard({ topic, onSwipe }) {
     };
 
     return (
-        <motion.div
-            className={`swipe-card ${isDragging ? 'dragging' : ''}`}
-            style={{ x, rotate }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.9}
-            onDragStart={() => setIsDragging(true)}
-            onDragEnd={handleDragEnd}
-            whileTap={{ cursor: 'grabbing' }}
-        >
-            {/* Like overlay */}
-            <motion.div className="swipe-overlay like-overlay" style={{ opacity: likeOpacity }}>
-                <span>STUDY ✓</span>
+        <>
+            <motion.div
+                className={`swipe-card ${isDragging ? 'dragging' : ''}`}
+                style={{ x, rotate }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.9}
+                onDragStart={() => setIsDragging(true)}
+                onDragEnd={handleDragEnd}
+                whileTap={{ cursor: 'grabbing' }}
+            >
+                {/* Like overlay */}
+                <motion.div className="swipe-overlay like-overlay" style={{ opacity: likeOpacity }}>
+                    <span>STUDY ✓</span>
+                </motion.div>
+
+                {/* Skip overlay */}
+                <motion.div className="swipe-overlay skip-overlay" style={{ opacity: skipOpacity }}>
+                    <span>SKIP ✗</span>
+                </motion.div>
+
+                {/* Card content */}
+                <div className="swipe-card-content">
+                    <div className="swipe-card-header">
+                        <div className="swipe-card-number">Topic</div>
+                        <h2 className="swipe-card-topic">{topic.topic}</h2>
+                    </div>
+
+                    <div className="swipe-card-divider" />
+
+                    <div className="swipe-card-points">
+                        <p className="swipe-card-points-label">Key Points</p>
+                        <ul className="swipe-card-points-list">
+                            {topic.summary_points.map((point, i) => (
+                                <li key={i} className="swipe-card-point">
+                                    <span className="swipe-card-point-dot" />
+                                    {point}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="swipe-card-footer-hint">
+                        <span>← Swipe Skip</span>
+                        {topic.lecture_text && (
+                            <button
+                                className="btn btn-ghost btn-sm swipe-card-info-btn"
+                                style={{ position: 'relative', zIndex: 10, touchAction: 'none' }}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onTouchStart={(e) => e.stopPropagation()}
+                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowModal(true); }}
+                            >
+                                📖 Read Intro
+                            </button>
+                        )}
+                        <span>Study →</span>
+                    </div>
+                </div>
+
             </motion.div>
-
-            {/* Skip overlay */}
-            <motion.div className="swipe-overlay skip-overlay" style={{ opacity: skipOpacity }}>
-                <span>SKIP ✗</span>
-            </motion.div>
-
-            {/* Card content */}
-            <div className="swipe-card-content">
-                <div className="swipe-card-header">
-                    <div className="swipe-card-number">Topic</div>
-                    <h2 className="swipe-card-topic">{topic.topic}</h2>
-                </div>
-
-                <div className="swipe-card-divider" />
-
-                <div className="swipe-card-points">
-                    <p className="swipe-card-points-label">Key Points</p>
-                    <ul className="swipe-card-points-list">
-                        {topic.summary_points.map((point, i) => (
-                            <li key={i} className="swipe-card-point">
-                                <span className="swipe-card-point-dot" />
-                                {point}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className="swipe-card-footer-hint">
-                    <span>← Swipe Skip</span>
-                    {topic.lecture_text && (
-                        <button
-                            className="btn btn-ghost btn-sm swipe-card-info-btn"
-                            onPointerDownCapture={(e) => e.stopPropagation()}
-                            onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
-                        >
-                            📖 Read Intro
-                        </button>
-                    )}
-                    <span>Study →</span>
-                </div>
-            </div>
 
             {/* Info Modal */}
             {showModal && (
                 <div
                     className="modal-overlay"
+                    style={{ zIndex: 9999 }}
                     onPointerDown={(e) => e.stopPropagation()}
                     onClick={() => setShowModal(false)}
                 >
@@ -109,8 +116,10 @@ export default function SwipeCard({ topic, onSwipe }) {
                             </div>
                             <button className="btn btn-ghost btn-icon" onClick={() => setShowModal(false)}>✕</button>
                         </div>
-                        <div className="swipe-info-content">
-                            <p>{topic.lecture_text}</p>
+                        <div className="swipe-info-content" style={{ textAlign: 'left' }}>
+                            {topic.lecture_text.split('\n').map((paragraph, i) => (
+                                paragraph.trim() ? <p key={i}>{paragraph}</p> : <br key={i} />
+                            ))}
                         </div>
                         <div className="import-actions" style={{ marginTop: '24px' }}>
                             <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => setShowModal(false)}>Got it</button>
@@ -118,6 +127,6 @@ export default function SwipeCard({ topic, onSwipe }) {
                     </div>
                 </div>
             )}
-        </motion.div>
+        </>
     );
 }
