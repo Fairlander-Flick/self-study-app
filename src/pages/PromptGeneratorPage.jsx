@@ -17,7 +17,7 @@ Please act as an expert tutor and instructional designer. Extract the key inform
 Follow these strict rules for the JSON output:
 1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
 2. The root must be a JSON Array [ ... ].
-3. Group the information into logical "topics" based on the sources. CRITICAL: Be extremely thorough. Create a high volume of topics to ensure no key information is left out.
+3. Group the information into logical "topics" based on the sources. CRITICAL: Be extremely thorough. Create a high volume of topics (MINIMUM 15-30 topics) to ensure absolutely no key information is left out. Break down large subjects into granular, bite-sized topics.
 4. For each topic, provide:
    - "id": A unique string (e.g., "1", "2").
    - "topic": A short title for this group of information.

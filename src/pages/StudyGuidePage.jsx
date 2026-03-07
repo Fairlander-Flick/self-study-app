@@ -87,9 +87,12 @@ export default function StudyGuidePage() {
                         <div className="guide-summary-box">
                             <h3>Key Takeaways</h3>
                             <ul>
-                                {topic.summary_points.map((point, i) => (
+                                {topic.summary_points && topic.summary_points.map((point, i) => (
                                     <li key={i}>{point}</li>
                                 ))}
+                                {(!topic.summary_points || topic.summary_points.length === 0) && (
+                                    <li style={{ listStyle: 'none', color: 'var(--clr-text-muted)' }}>No key takeaways provided.</li>
+                                )}
                             </ul>
                         </div>
                     </article>

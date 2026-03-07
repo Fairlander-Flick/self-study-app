@@ -221,7 +221,7 @@ ${topicText}
 Generate a deep-dive flashcard deck for me based ONLY on these exact points. Follow these strict rules for the JSON output:
 1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
 2. The root must be a JSON Array [ ... ].
-3. For each topic above, provide:
+3. For each topic above, provide granular sub-topics (create a MINIMUM of 15-30 granular topics across the whole output) ensuring absolutely no detail is missed:
    - "id": A unique string.
    - "topic": The exact topic name provided above.
    - "lecture_text": A comprehensive 2-3 paragraph deep-dive study guide explaining the specifics of these points (Markdown supported). CRITICAL: This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
