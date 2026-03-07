@@ -1,0 +1,304 @@
+.home-page {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100dvh - 65px);
+}
+
+/* ── Hero ── */
+.home-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xl);
+    padding: var(--space-2xl) var(--space-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.home-hero-content {
+    flex: 1;
+    max-width: 540px;
+}
+
+.home-hero-badge {
+    display: inline-flex;
+    margin-bottom: var(--space-lg);
+}
+
+.home-hero-title {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-md);
+}
+
+.gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.home-hero-desc {
+    font-size: var(--text-lg);
+    color: var(--clr-text-secondary);
+    margin-bottom: var(--space-xl);
+    max-width: 440px;
+    line-height: 1.7;
+}
+
+/* Hero Visual */
+.home-hero-visual {
+    flex: 0 0 340px;
+    position: relative;
+    height: 280px;
+}
+
+.hero-card {
+    position: absolute;
+    background: var(--gradient-card);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    box-shadow: var(--shadow-card);
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--clr-text-primary);
+}
+
+.hero-card-icon {
+    font-size: 24px;
+}
+
+.hero-card-1 {
+    top: 0;
+    left: 40px;
+    animation: float 4s ease-in-out infinite;
+}
+
+.hero-card-2 {
+    top: 100px;
+    right: 0;
+    animation: float 4s ease-in-out infinite 1.3s;
+}
+
+.hero-card-3 {
+    bottom: 0;
+    left: 0;
+    animation: float 4s ease-in-out infinite 2.6s;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ── Decks section ── */
+.home-decks-section {
+    flex: 1;
+    padding: var(--space-xl) 0 var(--space-2xl);
+    background: rgba(255, 255, 255, 0.015);
+    border-top: 1px solid var(--clr-border);
+}
+
+.home-decks-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-lg);
+}
+
+.home-decks-header h2 {
+    font-size: var(--text-2xl);
+}
+
+.home-loading {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-2xl);
+}
+
+.loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--clr-border);
+    border-top-color: var(--clr-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.home-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-2xl);
+    text-align: center;
+    background: var(--gradient-card);
+    border: 1px dashed var(--clr-border);
+    border-radius: var(--radius-xl);
+}
+
+.home-empty-icon {
+    font-size: 56px;
+    opacity: 0.3;
+}
+
+.home-empty h3 {
+    font-size: var(--text-xl);
+}
+
+/* ── Deck Grid ── */
+.decks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-lg);
+}
+
+/* ── Deck Card ── */
+.deck-card {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+    transition: all var(--transition-base);
+}
+
+.deck-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent, var(--clr-border-hover));
+    box-shadow: var(--shadow-card), 0 0 30px color-mix(in srgb, var(--accent, var(--clr-primary)) 20%, transparent);
+}
+
+.deck-card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent, var(--gradient-primary));
+}
+
+.deck-card-body {
+    flex: 1;
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.deck-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.deck-card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.deck-delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    color: var(--clr-text-muted);
+}
+
+.deck-card:hover .deck-delete-btn {
+    opacity: 1;
+}
+
+.deck-delete-btn:hover {
+    background: var(--clr-danger-bg);
+    color: var(--clr-danger);
+}
+
+.deck-card-name {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--clr-text-primary);
+    margin-top: var(--space-xs);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.deck-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.deck-card-date {
+    font-size: var(--text-xs);
+    color: var(--clr-text-muted);
+}
+
+.deck-card-footer {
+    border-top: 1px solid var(--clr-border);
+    padding: var(--space-sm) var(--space-lg);
+}
+
+.deck-study-hint {
+    font-size: var(--text-xs);
+    color: var(--clr-text-muted);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.deck-card:hover .deck-study-hint {
+    color: var(--clr-primary-light);
+}
+
+@media (max-width: 768px) {
+    .home-hero {
+        flex-direction: column;
+        padding: var(--space-xl) var(--space-lg);
+        text-align: center;
+    }
+
+    .home-hero-content {
+        max-width: 100%;
+    }
+
+    .home-hero-desc {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .home-hero-visual {
+        display: none;
+    }
+
+    .decks-grid {
+        grid-template-columns: 1fr;
+    }
+}
