@@ -194,6 +194,7 @@ Generate a deep-dive flashcard deck for me based ONLY on these exact points. Fol
 3. For each topic above, provide:
    - "id": A unique string.
    - "topic": The exact topic name provided above.
+   - "lecture_text": A comprehensive 2-3 paragraph deep-dive study guide explaining the specifics of these points (Markdown supported).
    - "summary_points": The exact points provided above.
    - "flashcards": An array of objects. Create 3-5 thought-provoking flashcards per topic that deeply test understanding of these specific points. Use a mix of:
       * Basic: { "type": "basic", "question": "...", "answer": "..." }
@@ -208,6 +209,7 @@ Example expected format:
   {
     "id": "1",
     "topic": "Example Topic",
+    "lecture_text": "Here is a detailed paragraph explaining the specifics of Point 1 and Point 2 in depth...",
     "summary_points": ["Point 1", "Point 2"],
     "flashcards": [
       { "type": "basic", "question": "Q?", "answer": "A." },
@@ -298,13 +300,22 @@ Example expected format:
                 >
                     ✨ Deep-Dive Prompt
                 </button>
-                <button
-                    id="start-study-btn"
-                    className="btn btn-primary"
-                    onClick={() => navigate(`/study/${deckId}`)}
-                >
-                    🚀 Start Studying!
-                </button>
+                <div className="finish-actions" style={{ flexDirection: 'column', gap: '12px' }}>
+                    <button
+                        className="btn btn-primary btn-lg"
+                        style={{ width: '100%', fontSize: '1.1rem' }}
+                        onClick={() => navigate(`/guide/${deckId}`)}
+                    >
+                        📖 Read Study Guide
+                    </button>
+                    <button
+                        className="btn btn-ghost btn-lg"
+                        style={{ width: '100%' }}
+                        onClick={() => navigate(`/study/${deckId}`)}
+                    >
+                        🃏 Skip to Flashcards
+                    </button>
+                </div>
             </div>
 
             {/* Prompt Modal */}

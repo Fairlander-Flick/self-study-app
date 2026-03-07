@@ -1,0 +1,200 @@
+.study-guide-page {
+    min-height: 100vh;
+    padding-bottom: 120px;
+    /* space for footer */
+    background: var(--clr-bg);
+}
+
+.guide-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-xl);
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--clr-border);
+}
+
+.guide-back {
+    color: var(--clr-text-secondary);
+}
+
+.guide-title-container {
+    text-align: center;
+    flex: 1;
+}
+
+.guide-title-container h1 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    margin-bottom: 4px;
+    background: linear-gradient(135deg, var(--clr-primary-light), var(--clr-primary-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.guide-subtitle {
+    font-size: var(--text-xs);
+    color: var(--clr-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.guide-action {
+    white-space: nowrap;
+}
+
+/* Main Content */
+.guide-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xl);
+}
+
+.guide-topic-section {
+    background: var(--clr-bg-elevated);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.guide-topic-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--clr-text-primary);
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--clr-border);
+}
+
+.guide-topic-number {
+    color: var(--clr-primary-light);
+    opacity: 0.8;
+}
+
+.guide-lecture-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--clr-text-secondary);
+    margin-bottom: var(--space-2xl);
+}
+
+.guide-lecture-text p {
+    margin-bottom: var(--space-md);
+}
+
+.guide-no-text {
+    padding: var(--space-xl);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    text-align: center;
+    color: var(--clr-text-muted);
+    font-style: italic;
+    margin-bottom: var(--space-2xl);
+}
+
+/* Key Takeaways Box */
+.guide-summary-box {
+    background: rgba(74, 222, 128, 0.05);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+}
+
+.guide-summary-box h3 {
+    color: var(--clr-success);
+    font-size: var(--text-md);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.guide-summary-box h3::before {
+    content: '★';
+}
+
+.guide-summary-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.guide-summary-box li {
+    position: relative;
+    padding-left: 24px;
+    font-size: var(--text-md);
+    color: var(--clr-text-secondary);
+    line-height: 1.5;
+}
+
+.guide-summary-box li::before {
+    content: '•';
+    position: absolute;
+    left: 8px;
+    color: var(--clr-success);
+    font-weight: bold;
+}
+
+/* Footer Action */
+.guide-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-xl);
+    background: linear-gradient(to top, var(--clr-bg) 60%, transparent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    z-index: 10;
+}
+
+.guide-footer p {
+    color: var(--clr-text-muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+@media (max-width: 600px) {
+    .guide-header {
+        padding: var(--space-sm);
+    }
+
+    .guide-title-container h1 {
+        font-size: var(--text-md);
+    }
+
+    .guide-content {
+        padding: var(--space-md);
+    }
+
+    .guide-topic-section {
+        padding: var(--space-xl);
+    }
+
+    .guide-topic-title {
+        font-size: var(--text-xl);
+    }
+
+    .guide-lecture-text {
+        font-size: 1rem;
+    }
+}

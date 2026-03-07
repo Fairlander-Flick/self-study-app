@@ -6,6 +6,7 @@ const SAMPLE_JSON = `[
   {
     "id": "1",
     "topic": "Cell Biology Basics",
+    "lecture_text": "Cell biology is the study of cells, their physiology, structure, and life cycle. The cell is the basic structural, functional, and biological unit of all known organisms. A cell is the smallest unit of life. Key components include the **cell membrane**, which is selectively permeable meaning it controls what enters and exits the cell. Inside the cell, the **nucleus** contains the genetic material (DNA) and coordinates cell activities. The **mitochondria** are often referred to as the powerhouse of the cell because they generate most of the cell's supply of ATP, used as a source of chemical energy.",
     "summary_points": [
       "Cell membrane is selectively permeable",
       "Mitochondria produces ATP (energy)",
@@ -50,6 +51,7 @@ const SAMPLE_JSON = `[
   {
     "id": "2",
     "topic": "Photosynthesis",
+    "lecture_text": "Photosynthesis is a process used by plants and other organisms to convert light energy into chemical energy that, through cellular respiration, can later be released to fuel the organism's activities. This chemical energy is stored in carbohydrate molecules, such as glucose, which are synthesized from **carbon dioxide** and **water** – hence the name photosynthesis. Oxygen is also released as a waste product. **Sunlight** provides the initial energy input required for this transformation.",
     "summary_points": [
       "Process by which plants make food",
       "Requires sunlight, CO2, and water",
@@ -76,6 +78,28 @@ const SAMPLE_JSON = `[
         "type": "basic",
         "question": "What are the primary outputs of photosynthesis?",
         "answer": "Glucose (sugar) for energy and oxygen (O2) as a byproduct."
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "topic": "Evolution Theory",
+    "lecture_text": "Evolution is change in the heritable characteristics of biological populations over successive generations. These characteristics are the expressions of genes that are passed on from parent to offspring during reproduction. Charles Darwin's theory of **natural selection** explains that organisms more suited to their environment are more likely to survive and pass on the genes that aided their success. This process causes species to change and diverge over time.",
+    "summary_points": [
+      "Proposed by Charles Darwin",
+      "Natural selection is the driving mechanism",
+      "Organisms adapt to their environments over time"
+    ],
+    "flashcards": [
+      {
+        "type": "basic",
+        "question": "Who is primarily credited with the theory of evolution by natural selection?",
+        "answer": "Charles Darwin, largely based on his observations in the Galapagos Islands."
+      },
+      {
+        "type": "basic",
+        "question": "Briefly define 'Natural Selection'.",
+        "answer": "The process where organisms better adapted to their environment tend to survive and produce more offspring."
       }
     ]
   }
@@ -107,11 +131,11 @@ export default function ImportModal({ onClose, onImported }) {
         return;
       }
       const missing = parsed.findIndex(
-        t => !t.topic || !Array.isArray(t.summary_points) || !Array.isArray(t.flashcards)
+        t => !t.topic || !t.lecture_text || !Array.isArray(t.summary_points) || !Array.isArray(t.flashcards)
       );
       if (missing !== -1) {
         setIsValid(false);
-        setError(`Topic ${missing + 1} is missing fields. Each topic must include "topic", "summary_points" and "flashcards".`);
+        setError(`Topic ${missing + 1} is missing fields. Each topic must include "topic", "lecture_text", "summary_points", and "flashcards".`);
         return;
       }
       setIsValid(true);
@@ -198,7 +222,7 @@ export default function ImportModal({ onClose, onImported }) {
               <textarea
                 id="json-input"
                 className="input textarea json-textarea"
-                placeholder={'Paste your JSON here...\n[\n  {\n    "id": "1",\n    "topic": "Topic Name",\n    "summary_points": ["point 1", "point 2"],\n    "flashcards": [\n      { "question": "Q?", "answer": "A." }\n    ]\n  }\n]'}
+                placeholder={'Paste your JSON here...\n[\n  {\n    "id": "3",\n    "topic": "Evolution Theory",\n    "lecture_text": "Evolution is change in the heritable characteristics of biological populations over successive generations. These characteristics are the expressions of genes that are passed on from parent to offspring during reproduction. Charles Darwin\'s theory of **natural selection** explains that organisms more suited to their environment are more likely to survive and pass on the genes that aided their success. This process causes species to change and diverge over time.",\n    "summary_points": [\n      "Proposed by Charles Darwin", "Organisms adapt to environment"\n    ],\n    "flashcards": [\n      { "question": "Q?", "answer": "A." }\n    ]\n  }\n]'}
                 value={jsonText}
                 onChange={handleJSONChange}
                 spellCheck={false}

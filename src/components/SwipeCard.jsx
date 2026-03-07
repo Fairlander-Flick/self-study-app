@@ -6,6 +6,7 @@ const SWIPE_THRESHOLD = 100; // px
 
 export default function SwipeCard({ topic, onSwipe }) {
     const [isDragging, setIsDragging] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const x = useMotionValue(0);
 
     // Rotate slightly as card is dragged
@@ -80,9 +81,43 @@ export default function SwipeCard({ topic, onSwipe }) {
 
                 <div className="swipe-card-footer-hint">
                     <span>← Swipe Skip</span>
+                    {topic.lecture_text && (
+                        <button
+                            className="btn btn-ghost btn-sm swipe-card-info-btn"
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onClick={() => setShowModal(true)}
+                        >
+                            📖 Read Intro
+                        </button>
+                    )}
                     <span>Study →</span>
                 </div>
             </div>
+
+            {/* Info Modal */}
+            {showModal && (
+                <div
+                    className="modal-overlay"
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={() => setShowModal(false)}
+                >
+                    <div className="modal swipe-info-modal" onClick={e => e.stopPropagation()}>
+                        <div className="import-modal-header">
+                            <div>
+                                <h2 className="import-modal-title">{topic.topic}</h2>
+                                <p className="import-modal-subtitle">Lecture Overview</p>
+                            </div>
+                            <button className="btn btn-ghost btn-icon" onClick={() => setShowModal(false)}>✕</button>
+                        </div>
+                        <div className="swipe-info-content">
+                            <p>{topic.lecture_text}</p>
+                        </div>
+                        <div className="import-actions" style={{ marginTop: '24px' }}>
+                            <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => setShowModal(false)}>Got it</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </motion.div>
     );
 }

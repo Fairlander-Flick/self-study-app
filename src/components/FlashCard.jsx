@@ -5,6 +5,7 @@ import './FlashCard.css';
 export default function FlashCard({ card, onAnswer }) {
     const [flipped, setFlipped] = useState(false);
     const [answered, setAnswered] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const handleAnswer = (knewIt) => {
         setAnswered(true);
@@ -35,12 +36,23 @@ export default function FlashCard({ card, onAnswer }) {
                             </div>
                         )}
                     </div>
-                    <button
-                        className="btn btn-primary flashcard-flip-btn"
-                        onClick={() => setFlipped(true)}
-                    >
-                        Show Answer ↻
-                    </button>
+                    <div className="flashcard-front-actions" style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', width: '100%', marginTop: 'auto' }}>
+                        {card.lecture_text && (
+                            <button
+                                className="btn btn-ghost btn-sm"
+                                onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
+                                style={{ marginRight: 'auto', fontSize: '13px' }}
+                            >
+                                📖 Read Context
+                            </button>
+                        )}
+                        <button
+                            className="btn btn-primary flashcard-flip-btn"
+                            onClick={() => setFlipped(true)}
+                        >
+                            Show Answer ↻
+                        </button>
+                    </div>
                 </div>
 
                 {/* Back */}
@@ -75,8 +87,47 @@ export default function FlashCard({ card, onAnswer }) {
                             <span className="icon">✓</span>
                         </button>
                     </div>
+                    {card.lecture_text && (
+                        <div style={{ position: 'absolute', top: '16px', right: '16px' }}>
+                            <button
+                                className="btn btn-ghost btn-icon"
+                                onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
+                                title="Read Context"
+                            >
+                                📖
+                            </button>
+                        </div>
+                    )}
                 </div>
             </motion.div>
+
+            {/* Context Modal */}
+            {showModal && (
+                <div
+                    className="modal-overlay"
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={() => setShowModal(false)}
+                    style={{ zIndex: 9999 }}
+                >
+                    <div className="modal swipe-info-modal" onClick={e => e.stopPropagation()}>
+                        <div className="import-modal-header">
+                            <div>
+                                <h2 className="import-modal-title" style={{ fontSize: '1.2rem' }}>{card.topicName}</h2>
+                                <p className="import-modal-subtitle">Lecture Context</p>
+                            </div>
+                            <button className="btn btn-ghost btn-icon" onClick={() => setShowModal(false)}>✕</button>
+                        </div>
+                        <div className="swipe-info-content" style={{ textAlign: 'left' }}>
+                            {card.lecture_text.split('\n').map((paragraph, i) => (
+                                paragraph.trim() ? <p key={i}>{paragraph}</p> : <br key={i} />
+                            ))}
+                        </div>
+                        <div className="import-actions" style={{ marginTop: '24px' }}>
+                            <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => setShowModal(false)}>Got it</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

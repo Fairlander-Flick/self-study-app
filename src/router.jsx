@@ -6,6 +6,7 @@ import ConfirmSelection from './pages/ConfirmSelection.jsx';
 import StudyPage from './pages/StudyPage.jsx';
 import ResultsPage from './pages/ResultsPage.jsx';
 import PromptGeneratorPage from './pages/PromptGeneratorPage.jsx';
+import StudyGuidePage from './pages/StudyGuidePage.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 const router = createBrowserRouter([
@@ -16,6 +17,8 @@ const router = createBrowserRouter([
             { index: true, element: <Home /> },
             { path: 'swipe/:id', element: <SwipePage /> },
             { path: 'confirm/:id', element: <ConfirmSelection /> },
+            { path: 'deck/:id', element: <SwipePage /> },
+            { path: 'guide/:id', element: <StudyGuidePage /> },
             { path: 'study/:id', element: <StudyPage /> },
             { path: 'results/:id', element: <ResultsPage /> },
             { path: 'prompt', element: <PromptGeneratorPage /> },

@@ -21,6 +21,7 @@ Follow these strict rules for the JSON output:
 4. For each topic, provide:
    - "id": A unique string (e.g., "1", "2").
    - "topic": A short title for this group of information.
+   - "lecture_text": A comprehensive, well-written, 2-3 paragraph study guide explaining the topic context fully (Markdown supported).
    - "summary_points": An array of strings. Maximum 4 bullet points.
    - "flashcards": An array of objects. Mix 3 types of flashcards (create 3-5 total per topic):
       * Type 1 (Basic/Standard): { "type": "basic", "question": "...", "answer": "..." }
@@ -36,6 +37,7 @@ Example expected format:
   {
     "id": "1",
     "topic": "Photosynthesis Basics",
+    "lecture_text": "Photosynthesis is the fundamental process by which plants, algae, and some bacteria capture sunlight to create their own food. It takes place primarily in the chloroplasts, where light energy is used to convert water and carbon dioxide into oxygen and energy-rich organic compounds like glucose. This process is the foundation of most life on Earth, as it provides the primary source of organic matter.",
     "summary_points": [
       "Plants use sunlight to make food."
     ],

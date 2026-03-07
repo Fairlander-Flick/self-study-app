@@ -38,7 +38,7 @@ export default function StudyPage() {
             let cards = [];
             liked.forEach(topic => {
                 topic.flashcards.forEach(card => {
-                    cards.push({ ...card, topicId: topic.id, topicName: topic.topic });
+                    cards.push({ ...card, topicId: topic.id, topicName: topic.topic, lecture_text: topic.lecture_text });
                 });
             });
 
