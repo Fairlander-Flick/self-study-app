@@ -365,4 +365,24 @@
     .swipe-finished-actions-row {
         flex-direction: column;
     }
+
+    .swipe-buttons {
+        gap: var(--space-md);
+        margin-top: var(--space-lg);
+    }
+
+    .swipe-btn {
+        width: 60px;
+        height: 60px;
+    }
+
+    .swipe-btn-undo {
+        width: 48px !important;
+        height: 48px !important;
+        margin-top: 10px !important;
+    }
+
+    .swipe-btn-icon {
+        font-size: 20px;
+    }
 }

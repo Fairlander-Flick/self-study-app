@@ -147,3 +147,28 @@
     background: var(--clr-bg-elevated);
     border-radius: 4px;
 }
+
+@media (max-width: 600px) {
+    .flashcard-container {
+        height: auto;
+        min-height: 450px;
+        max-height: calc(100vh - 120px);
+    }
+
+    .flashcard-face {
+        padding: var(--space-md);
+    }
+
+    .flashcard-question-area h3 {
+        font-size: var(--text-xl);
+    }
+
+    .flashcard-option-item {
+        padding: 10px 12px;
+        font-size: var(--text-sm);
+    }
+
+    .flashcard-btn {
+        padding: 10px;
+    }
+}
