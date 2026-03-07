@@ -1,0 +1,167 @@
+.swipe-card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-card);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    will-change: transform;
+    z-index: 2;
+    cursor: grab;
+    touch-action: none;
+}
+
+.swipe-card.dragging {
+    cursor: grabbing;
+    transition: none;
+}
+
+/* ── Content ── */
+.swipe-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-xl);
+    position: relative;
+    z-index: 2;
+}
+
+.swipe-card-header {
+    margin-bottom: var(--space-md);
+}
+
+.swipe-card-number {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--clr-primary-light);
+    margin-bottom: 8px;
+}
+
+.swipe-card-topic {
+    font-size: clamp(24px, 6vw, 32px);
+    color: white;
+    line-height: 1.2;
+}
+
+.swipe-card-divider {
+    width: 40px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    margin-bottom: var(--space-lg);
+}
+
+.swipe-card-points {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.swipe-card-points-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--clr-text-muted);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+}
+
+.swipe-card-points-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.swipe-card-point {
+    display: flex;
+    gap: 12px;
+    font-size: var(--text-base);
+    color: var(--clr-text-secondary);
+    line-height: 1.6;
+}
+
+.swipe-card-point-dot {
+    margin-top: 8px;
+    flex: 0 0 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--clr-primary);
+    box-shadow: 0 0 8px var(--clr-primary);
+}
+
+.swipe-card-footer-hint {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: var(--space-lg);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+}
+
+/* ── Overlays (Like/Skip) ── */
+.swipe-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    padding: var(--space-xl);
+    pointer-events: none;
+}
+
+.swipe-overlay span {
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 4px solid;
+    border-radius: var(--radius-md);
+    background: rgba(10, 10, 18, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.like-overlay {
+    justify-content: flex-start;
+    background: linear-gradient(to right, rgba(74, 222, 128, 0.15), transparent);
+}
+
+.like-overlay span {
+    color: var(--clr-success);
+    border-color: var(--clr-success);
+    transform: rotate(-10deg);
+}
+
+.skip-overlay {
+    justify-content: flex-end;
+    background: linear-gradient(to left, rgba(248, 113, 113, 0.15), transparent);
+}
+
+.skip-overlay span {
+    color: var(--clr-danger);
+    border-color: var(--clr-danger);
+    transform: rotate(10deg);
+}
+
+/* Custom scrollbar for points */
+.swipe-card-points::-webkit-scrollbar {
+    width: 4px;
+}
+
+.swipe-card-points::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.swipe-card-points::-webkit-scrollbar-thumb {
+    background: var(--clr-bg-elevated);
+    border-radius: 4px;
+}

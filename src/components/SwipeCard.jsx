@@ -1,0 +1,88 @@
+import { useState } from 'react';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import './SwipeCard.css';
+
+const SWIPE_THRESHOLD = 100; // px
+
+export default function SwipeCard({ topic, onSwipe }) {
+    const [isDragging, setIsDragging] = useState(false);
+    const x = useMotionValue(0);
+
+    // Rotate slightly as card is dragged
+    const rotate = useTransform(x, [-300, 0, 300], [-18, 0, 18]);
+
+    // Overlay opacity for like/skip indicators
+    const likeOpacity = useTransform(x, [20, 120], [0, 1], { clamp: true });
+    const skipOpacity = useTransform(x, [-120, -20], [1, 0], { clamp: true });
+
+    const handleDragEnd = (_, info) => {
+        setIsDragging(false);
+        const offset = info.offset.x;
+        if (offset > SWIPE_THRESHOLD) {
+            flyOut('right');
+        } else if (offset < -SWIPE_THRESHOLD) {
+            flyOut('left');
+        } else {
+            // snap back
+            animate(x, 0, { type: 'spring', stiffness: 300, damping: 20 });
+        }
+    };
+
+    const flyOut = (direction) => {
+        animate(x, direction === 'right' ? 600 : -600, {
+            duration: 0.3,
+            ease: 'easeOut',
+            onComplete: () => onSwipe(direction),
+        });
+    };
+
+    return (
+        <motion.div
+            className={`swipe-card ${isDragging ? 'dragging' : ''}`}
+            style={{ x, rotate }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.9}
+            onDragStart={() => setIsDragging(true)}
+            onDragEnd={handleDragEnd}
+            whileTap={{ cursor: 'grabbing' }}
+        >
+            {/* Like overlay */}
+            <motion.div className="swipe-overlay like-overlay" style={{ opacity: likeOpacity }}>
+                <span>ÇALIŞACAĞIM ✓</span>
+            </motion.div>
+
+            {/* Skip overlay */}
+            <motion.div className="swipe-overlay skip-overlay" style={{ opacity: skipOpacity }}>
+                <span>GEÇ ✗</span>
+            </motion.div>
+
+            {/* Card content */}
+            <div className="swipe-card-content">
+                <div className="swipe-card-header">
+                    <div className="swipe-card-number">Konu</div>
+                    <h2 className="swipe-card-topic">{topic.topic}</h2>
+                </div>
+
+                <div className="swipe-card-divider" />
+
+                <div className="swipe-card-points">
+                    <p className="swipe-card-points-label">Kilit Noktalar</p>
+                    <ul className="swipe-card-points-list">
+                        {topic.summary_points.map((point, i) => (
+                            <li key={i} className="swipe-card-point">
+                                <span className="swipe-card-point-dot" />
+                                {point}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="swipe-card-footer-hint">
+                    <span>← Sürükle Geç</span>
+                    <span>Çalışacağım →</span>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
