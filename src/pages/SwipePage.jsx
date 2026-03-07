@@ -330,7 +330,7 @@ Example expected format:
                 >
                     ✨ Deep-Dive Prompt
                 </button>
-                <div className="finish-actions" style={{ flexDirection: 'column', gap: '12px' }}>
+                <div className="finish-actions" style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', marginTop: '8px' }}>
                     <button
                         className="btn btn-primary btn-lg"
                         style={{ width: '100%', fontSize: '1.1rem' }}
