@@ -5,20 +5,74 @@ import './ImportModal.css';
 const SAMPLE_JSON = `[
   {
     "id": "1",
-    "topic": "Hücrenin Yapısı",
+    "topic": "Cell Biology Basics",
     "summary_points": [
-      "Hücre zarı seçici geçirgendir",
-      "Mitokondri ATP üretir (enerji merkezi)",
-      "Çekirdek DNA'yı barındırır"
+      "Cell membrane is selectively permeable",
+      "Mitochondria produces ATP (energy)",
+      "Nucleus contains DNA"
     ],
     "flashcards": [
       {
-        "question": "Hücre zarının temel özelliği nedir?",
-        "answer": "Seçici geçirgendir — sadece belirli maddelerin geçişine izin verir."
+        "question": "What is the primary function of the cell membrane?",
+        "answer": "It is selectively permeable—it controls what enters and exits the cell."
       },
       {
-        "question": "Mitokondri ne iş yapar?",
-        "answer": "Hücrenin enerji santralidir. Glikozdan ATP sentezler."
+        "question": "What does the mitochondria do?",
+        "answer": "It acts as the powerhouse of the cell, generating ATP from glucose."
+      },
+      {
+        "question": "Where is the genetic material stored in a eukaryotic cell?",
+        "answer": "In the nucleus."
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "topic": "Photosynthesis",
+    "summary_points": [
+      "Process by which plants make food",
+      "Requires sunlight, CO2, and water",
+      "Produces glucose and oxygen"
+    ],
+    "flashcards": [
+      {
+        "question": "What are the three main inputs required for photosynthesis?",
+        "answer": "Sunlight, carbon dioxide (CO2), and water (H2O)."
+      },
+      {
+        "question": "What are the primary outputs of photosynthesis?",
+        "answer": "Glucose (sugar) for energy and oxygen (O2) as a byproduct."
+      },
+      {
+        "question": "Where does photosynthesis occur in a plant cell?",
+        "answer": "In the chloroplasts, which contain chlorophyll."
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "topic": "Evolution Theory",
+    "summary_points": [
+      "Proposed by Charles Darwin",
+      "Natural selection is the driving mechanism",
+      "Organisms adapt to their environments over time"
+    ],
+    "flashcards": [
+      {
+        "question": "Who is primarily credited with the theory of evolution by natural selection?",
+        "answer": "Charles Darwin, largely based on his observations in the Galapagos Islands."
+      },
+      {
+        "question": "Briefly define 'Natural Selection'.",
+        "answer": "The process where organisms better adapted to their environment tend to survive and produce more offspring."
+      },
+      {
+        "question": "What is a major source of genetic variation in a population?",
+        "answer": "Mutations, which create new alleles that can be selected for or against."
+      },
+      {
+        "question": "Are acquired traits (like muscles built at the gym) passed down to offspring according to modern evolutionary theory?",
+        "answer": "No. Only genetic traits inherited through DNA are passed down."
       }
     ]
   }
