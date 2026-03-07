@@ -15,7 +15,7 @@ export default function StudyGuidePage() {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const deckData = await getDeck(Number(id));
+                const deckData = await getDeck(id);
                 if (!deckData) {
                     setError('Deck not found');
                     return;

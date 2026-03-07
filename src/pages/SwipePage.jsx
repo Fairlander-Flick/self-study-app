@@ -339,11 +339,11 @@ Example expected format:
                         📖 Read Study Guide
                     </button>
                     <button
-                        className="btn btn-ghost btn-lg"
+                        className="btn btn-primary btn-lg"
                         style={{ width: '100%' }}
                         onClick={() => navigate(`/study/${deckId}`)}
                     >
-                        🃏 Skip to Flashcards
+                        🃏 Proceed to Flashcards and Quizzes
                     </button>
                 </div>
             </div>
