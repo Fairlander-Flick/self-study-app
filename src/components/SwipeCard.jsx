@@ -84,8 +84,8 @@ export default function SwipeCard({ topic, onSwipe }) {
                     {topic.lecture_text && (
                         <button
                             className="btn btn-ghost btn-sm swipe-card-info-btn"
-                            onPointerDown={(e) => e.stopPropagation()}
-                            onClick={() => setShowModal(true)}
+                            onPointerDownCapture={(e) => e.stopPropagation()}
+                            onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
                         >
                             📖 Read Intro
                         </button>

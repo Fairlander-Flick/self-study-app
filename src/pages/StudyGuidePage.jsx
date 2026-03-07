@@ -22,13 +22,14 @@ export default function StudyGuidePage() {
                 }
                 setDeck(deckData);
 
-                // Get selected topic IDs from session storage
-                const stored = sessionStorage.getItem(`study_topics_${id}`);
-                const selectedIds = stored ? JSON.parse(stored) : null;
+                // Get selected topics from session storage (SwipePage saves the full topic objects here)
+                const stored = sessionStorage.getItem(`swipe_liked_${id}`);
+                const likedTopics = stored ? JSON.parse(stored) : null;
 
                 let topicsToShow = deckData.topics;
-                if (selectedIds && selectedIds.length > 0) {
-                    topicsToShow = deckData.topics.filter(t => selectedIds.includes(t.id));
+                if (likedTopics && likedTopics.length > 0) {
+                    const likedIds = likedTopics.map(t => t.id);
+                    topicsToShow = deckData.topics.filter(t => likedIds.includes(t.id));
                 }
 
                 setTopics(topicsToShow);
