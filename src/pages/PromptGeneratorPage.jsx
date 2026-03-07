@@ -69,7 +69,7 @@ Example expected format:
         try {
             await navigator.clipboard.writeText(prompt);
             setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+            setTimeout(() => setCopied(false), 10000);
         } catch (err) {
             console.error('Failed to copy text: ', err);
             // Fallback for older browsers
@@ -81,7 +81,7 @@ Example expected format:
             try {
                 document.execCommand('copy');
                 setCopied(true);
-                setTimeout(() => setCopied(false), 2000);
+                setTimeout(() => setCopied(false), 10000);
             } catch (err) {
                 console.error('Fallback copy failed', err);
             }
