@@ -1,14 +1,17 @@
 .study-guide-page {
     min-height: 100vh;
     padding-bottom: 120px;
+    padding-top: 70px;
     /* space for footer */
     background: var(--clr-bg);
 }
 
 .guide-header {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 10;
+    left: 0;
+    right: 0;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;

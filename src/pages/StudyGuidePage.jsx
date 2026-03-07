@@ -48,7 +48,7 @@ export default function StudyGuidePage() {
     if (!topics.length) return <div className="error-message">No topics selected for study.</div>;
 
     return (
-        <div className="study-guide-page animate-fade-in">
+        <div className="study-guide-page">
             <header className="guide-header">
                 <button className="btn btn-ghost btn-sm guide-back" onClick={() => navigate('/')}>
                     ← Back
@@ -65,7 +65,7 @@ export default function StudyGuidePage() {
                 </button>
             </header>
 
-            <main className="guide-content">
+            <main className="guide-content animate-fade-in">
                 {topics.map((topic, index) => (
                     <article key={topic.id} className="guide-topic-section">
                         <h2 className="guide-topic-title">
