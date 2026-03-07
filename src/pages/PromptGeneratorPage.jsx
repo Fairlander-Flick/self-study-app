@@ -25,12 +25,11 @@ Follow these strict rules for the JSON output:
    - "topic": A short title for this group of information.
    - "lecture_text": A comprehensive, well-structured, 3-4 paragraph study guide. CRITICAL: Use Markdown (e.g., **bold**, *italics*, bullet points) and liberally use relevant EMOJIS (🧠, 💡, ⚠️, etc.) to make it highly engaging and visually broken down. This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": An array of strings. Maximum 4 bullet points.
-   - "flashcards": An array of objects. Mix 3 types of flashcards. CRITICAL: Provide AT LEAST 5 flashcards per topic (ideally 5-10) to help reach the minimum total of ${totalQ} flashcards.
-      * Type 1 (Basic/Standard): { "type": "basic", "question": "...", "answer": "..." }
-      * Type 2 (Multiple Choice - 1 correct): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } 
-      * Type 3 (Multiple Correct / Choose all that apply): { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] }
+   - "flashcards": An array of objects. CRITICAL: Provide AT LEAST 5 flashcards per topic (ideally 5-10) to help reach the minimum total of ${totalQ} flashcards. EVERY single flashcard MUST be either Multiple Choice or Multiple Correct. DO NOT create basic short answer questions.
+      * Type 1 (Multiple Choice - 1 correct): { "type": "multiple_choice", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": "C) ..." } 
+      * Type 2 (Multiple Correct / Choose all that apply): { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] }
       MAKE SURE multiple choice and multiple correct questions ALWAYS have exactly 5 options (A, B, C, D, E).
-5. Make questions thought-provoking but concise.
+5. QUESTION QUALITY RULE (CRITICAL): ALL questions MUST test conceptual understanding, main ideas, and critical thinking. NEVER ask rote memorization questions (like asking for specific dates, exact names, or trivial facts). Focus entirely on "genel bilgi ve fikri anlama" (general knowledge and comprehension).
 6. Make answers clear and easy to read quickly.
 7. Output Language: Keep the language of the output the same as the sources.
 
@@ -44,11 +43,6 @@ Example expected format:
       "Plants use sunlight to make food."
     ],
     "flashcards": [
-      {
-        "type": "basic",
-        "question": "What are the two main inputs for photosynthesis?",
-        "answer": "Water and carbon dioxide."
-      },
       {
         "type": "multiple_choice",
         "question": "Which organelle is responsible for photosynthesis?",
