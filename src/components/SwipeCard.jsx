@@ -86,9 +86,8 @@ export default function SwipeCard({ topic, onSwipe }) {
                             <button
                                 className="btn btn-ghost btn-sm swipe-card-info-btn"
                                 style={{ position: 'relative', zIndex: 10, touchAction: 'none' }}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onTouchStart={(e) => e.stopPropagation()}
+                                onPointerDownCapture={(e) => e.stopPropagation()}
+                                onTouchStartCapture={(e) => e.stopPropagation()}
                                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowModal(true); }}
                             >
                                 📖 Read Intro

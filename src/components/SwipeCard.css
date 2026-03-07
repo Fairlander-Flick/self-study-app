@@ -105,6 +105,9 @@
     color: rgba(255, 255, 255, 0.2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+.swipe-card-footer-hint span {
     pointer-events: none;
 }
 
@@ -172,6 +175,7 @@
     background: var(--clr-bg-elevated);
     border: 1px solid var(--clr-border);
     color: var(--clr-primary-light);
+    pointer-events: auto;
 }
 
 .swipe-info-modal {
