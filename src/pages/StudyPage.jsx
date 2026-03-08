@@ -135,6 +135,21 @@ export default function StudyPage() {
         }
     };
 
+    const handleSkip = () => {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex >= queue.length) {
+            finishSession(sessionStats);
+        } else {
+            setCurrentIndex(nextIndex);
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex(currentIndex - 1);
+        }
+    };
+
     if (loading) return <div className="page-center"><div className="loading-spinner" /></div>;
 
     const currentCard = queue[currentIndex];
@@ -149,14 +164,14 @@ export default function StudyPage() {
         <div className="study-page animate-fade-in">
             <div className="study-topbar">
                 <button className="btn btn-ghost btn-sm" onClick={() => navigate(`/swipe/${id}`)}>
-                    ← Quit
+                    ← Quit Quiz
                 </button>
                 <div className="study-progress-container">
                     <div className="progress-bar">
                         <div className="progress-bar-fill" style={{ width: `${progress * 100}%` }} />
                     </div>
                     <div className="study-progress-text">
-                        {currentIndex + 1} / {queue.length} left
+                        Question {currentIndex + 1} of {queue.length}
                     </div>
                 </div>
             </div>
@@ -168,6 +183,23 @@ export default function StudyPage() {
                     onAnswer={handleAnswer}
                     onDiscard={handleDiscard}
                 />
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '16px' }}>
+                <button
+                    className="btn btn-ghost btn-sm"
+                    onClick={handlePrev}
+                    disabled={currentIndex === 0}
+                    style={{ opacity: currentIndex === 0 ? 0.3 : 1 }}
+                >
+                    ← Previous Question
+                </button>
+                <button
+                    className="btn btn-ghost btn-sm"
+                    onClick={handleSkip}
+                >
+                    Skip Question →
+                </button>
             </div>
         </div>
     );

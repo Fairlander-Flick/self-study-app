@@ -375,7 +375,7 @@ Example expected format:
                         style={{ width: '100%' }}
                         onClick={() => navigate(`/study/${deckId}`)}
                     >
-                        🃏 Proceed to Flashcards and Quizzes
+                        📝 Proceed to Quiz
                     </button>
                 </div>
             </div>
