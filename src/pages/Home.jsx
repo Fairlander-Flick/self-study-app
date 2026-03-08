@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllDecks, deleteDeck, getBestScore } from '../services/db.js';
+import { getAllDecks, deleteDeck, getBestScore, getProfile, getLevelInfo, getAllSessions } from '../services/db.js';
 import ImportModal from '../components/ImportModal.jsx';
+import { DeckCardSkeleton, StatsSkeleton } from '../components/Skeleton.jsx';
 import './Home.css';
 
 export default function Home() {
     const [decks, setDecks] = useState([]);
     const [showImport, setShowImport] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [profile, setProfile] = useState(null);
+    const [globalStats, setGlobalStats] = useState(null);
     const navigate = useNavigate();
 
     const loadDecks = async () => {
@@ -20,6 +23,21 @@ export default function Home() {
                 })
             );
             setDecks(allWithScores);
+
+            // Load profile for XP/Level
+            const p = await getProfile();
+            setProfile(p);
+
+            // Compute global stats across all sessions
+            const sessions = await getAllSessions();
+            if (sessions.length > 0) {
+                const totalQuestions = sessions.reduce((acc, s) => acc + (s.totalCards || 0), 0);
+                const totalCorrect = p.totalCorrect || 0;
+                const avgScore = Math.round(
+                    sessions.reduce((acc, s) => acc + (s.score || 0), 0) / sessions.length
+                );
+                setGlobalStats({ totalQuestions, totalCorrect, avgScore, sessionCount: sessions.length });
+            }
         } catch (err) {
             console.error(err);
         } finally {
@@ -41,6 +59,8 @@ export default function Home() {
         navigate(`/swipe/${deckId}`);
     };
 
+    const levelInfo = profile ? getLevelInfo(profile.xp) : null;
+
     return (
         <div className="home-page animate-fade-in">
             {/* Hero Header */}
@@ -54,7 +74,7 @@ export default function Home() {
                         Not Harder
                     </h1>
                     <p className="home-hero-desc">
-                        Instead of manually sifting through questions in NotebookLM, make studying fun! Import your AI-generated notes, swipe through topics Tinder-style to filter what you want to learn, and master your material with interactive flashcards.
+                        Import your AI-generated notes, swipe through topics to filter what you want to learn, and master your material with interactive quizzes.
                     </p>
                     <button
                         id="new-deck-btn"
@@ -80,6 +100,53 @@ export default function Home() {
                 </div>
             </div>
 
+            {/* Level & XP Widget */}
+            {!loading && levelInfo && profile.xp > 0 && (
+                <div className="home-level-widget container">
+                    <div className="level-widget-left">
+                        <span className="level-star">⭐</span>
+                        <div>
+                            <div className="level-label">Level {levelInfo.level}</div>
+                            <div className="level-sub">{profile.xp} total XP</div>
+                        </div>
+                    </div>
+                    <div className="level-widget-right">
+                        <div className="level-xp-text">
+                            {levelInfo.xpIntoCurrentLevel} / {levelInfo.xpForNextLevel} XP to next level
+                        </div>
+                        <div className="level-bar-track">
+                            <div
+                                className="level-bar-fill"
+                                style={{ width: `${Math.min(levelInfo.progress * 100, 100)}%` }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Global Stats */}
+            {loading ? (
+                <div className="container"><StatsSkeleton /></div>
+            ) : globalStats ? (
+                <div className="home-stats-bar container">
+                    <div className="stat-card">
+                        <div className="stat-icon">📚</div>
+                        <div className="stat-value">{globalStats.totalQuestions}</div>
+                        <div className="stat-label">Questions Answered</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-icon">✅</div>
+                        <div className="stat-value">{globalStats.totalCorrect}</div>
+                        <div className="stat-label">Correct Answers</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-icon">🎯</div>
+                        <div className="stat-value">{globalStats.avgScore}%</div>
+                        <div className="stat-label">Avg. Accuracy</div>
+                    </div>
+                </div>
+            ) : null}
+
             {/* Decks Section */}
             <div className="home-decks-section">
                 <div className="container">
@@ -96,8 +163,8 @@ export default function Home() {
                     </div>
 
                     {loading ? (
-                        <div className="home-loading">
-                            <div className="loading-spinner" />
+                        <div className="decks-grid">
+                            {[1, 2, 3].map(i => <DeckCardSkeleton key={i} />)}
                         </div>
                     ) : decks.length === 0 ? (
                         <div className="home-empty">
@@ -138,7 +205,7 @@ export default function Home() {
 }
 
 function DeckCard({ deck, index, onStudy, onDelete }) {
-    const createdDate = new Date(deck.createdAt).toLocaleDateString('tr-TR', {
+    const createdDate = new Date(deck.createdAt).toLocaleDateString('en-US', {
         day: 'numeric', month: 'long', year: 'numeric'
     });
 
@@ -151,7 +218,6 @@ function DeckCard({ deck, index, onStudy, onDelete }) {
         '#f87171',
     ];
     const accent = colors[index % colors.length];
-
     const bestScore = deck.bestScore;
     let scoreColor = 'var(--clr-text-muted)';
     if (bestScore >= 90) scoreColor = 'var(--clr-success)';
