@@ -26,8 +26,9 @@ Follow these strict rules for the JSON output:
    - "lecture_text": A comprehensive, well-structured, 3-4 paragraph study guide. CRITICAL: Use Markdown (e.g., **bold**, *italics*, bullet points) and liberally use relevant EMOJIS (🧠, 💡, ⚠️, etc.) to make it highly engaging and visually broken down. This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
    - "summary_points": An array of strings. Maximum 4 bullet points.
    - "flashcards": An array of objects. CRITICAL: Provide AT LEAST 5 flashcards per topic (ideally 5-10) to help reach the minimum total of ${totalQ} flashcards. EVERY single flashcard MUST be of type "multiple_correct". DO NOT create basic short answer questions.
-      * Format: { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."] }
+      * Format: { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."], "explanation": "..." }
       * CRITICAL REQUIREMENT: The "answer" field MUST ALWAYS BE AN ARRAY OF STRINGS. Even if there is only ONE correct answer to the question conceptually, format the answer as a single-element array (e.g., ["C) ..."]).
+      * CRITICAL REQUIREMENT: The "explanation" field MUST be a 1-2 sentence string explaining exactly why the correct answer(s) are correct, and why key distractors are incorrect.
       MAKE SURE questions ALWAYS have exactly 5 options (A, B, C, D, E).
 5. QUESTION QUALITY RULE (CRITICAL): ALL questions MUST test conceptual understanding, main ideas, and critical thinking. NEVER ask rote memorization questions (like asking for specific dates, exact names, or trivial facts). Focus entirely on "genel bilgi ve fikri anlama" (general knowledge and comprehension).
 6. Make answers clear and easy to read quickly.
@@ -42,18 +43,19 @@ Example expected format:
     "summary_points": [
       "Plants use sunlight to make food."
     ],
-    "flashcards": [
       {
         "type": "multiple_correct",
         "question": "Which organelle is responsible for photosynthesis?",
         "options": ["A) Nucleus", "B) Ribosome", "C) Chloroplast", "D) Mitochondria", "E) Endoplasmic Reticulum"],
-        "answer": ["C) Chloroplast"]
+        "answer": ["C) Chloroplast"],
+        "explanation": "Chloroplasts contain chlorophyll, which captures sunlight to drive photosynthesis. The other organellas serve different functions, such as the Mitochondria handling cellular respiration."
       },
       {
         "type": "multiple_correct",
         "question": "Which of the following are REQUIRED for photosynthesis to occur? (Choose all that apply)",
         "options": ["A) Sunlight", "B) Oxygen", "C) Water", "D) Glucose", "E) Carbon Dioxide"],
-        "answer": ["A) Sunlight", "C) Water", "E) Carbon Dioxide"]
+        "answer": ["A) Sunlight", "C) Water", "E) Carbon Dioxide"],
+        "explanation": "Photosynthesis uses Sunlight to convert Water and Carbon Dioxide into energy. Oxygen and Glucose are the outputs, not the required inputs."
       }
     ]
   }

@@ -65,7 +65,14 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
             {/* Result banner */}
             {isEvaluated && (
                 <div className={`fc-result-banner ${isCorrect ? 'correct' : 'incorrect'}`}>
-                    {isCorrect ? '✅ Correct!' : '❌ Incorrect — correct answer(s) highlighted in green'}
+                    <div style={{ fontWeight: '600', marginBottom: card.explanation ? '8px' : '0' }}>
+                        {isCorrect ? '✅ Correct!' : '❌ Incorrect — correct answer(s) highlighted in green'}
+                    </div>
+                    {card.explanation && (
+                        <div style={{ fontSize: '0.9rem', fontWeight: 'normal', color: 'var(--clr-text-primary)', lineHeight: '1.4' }}>
+                            💡 {card.explanation}
+                        </div>
+                    )}
                 </div>
             )}
 
