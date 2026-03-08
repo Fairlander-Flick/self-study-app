@@ -12,20 +12,30 @@ export default function PromptGeneratorPage() {
     const isFormValid = topic.trim().length > 0 && qPerSource > 0 && totalQ > 0;
 
     const generatePrompt = () => {
-        return `Analyze all sources in this NotebookLM project about "${topic.trim()}" and output a JSON flashcard deck.
+        return `I am studying "${topic.trim()}" and I need you to analyze all the attached sources in this NotebookLM project.
 
-RULES (follow strictly):
-1. Output ONLY valid JSON. No markdown, no extra text.
-2. Root is a JSON Array [ ... ].
-3. Create AT LEAST ${qPerSource} topics per source/page, minimum ${totalQ} total flashcards. Break topics down granularly — do NOT summarize whole lectures into one topic.
-4. Each topic object:
-   "id": unique string | "topic": short title | "lecture_text": 3-4 paragraph Markdown study guide with bold, bullets, and emojis (🧠💡⚠️) sourced only from the documents | "summary_points": max 4 strings | "flashcards": array (min 5 per topic).
-5. Every flashcard MUST be type "multiple_correct", 5 options (A–E), answer is ALWAYS an array of strings (even if only 1 correct), plus a 1-2 sentence "explanation" of why correct answers are right and distractors are wrong.
-6. Questions must test conceptual understanding and critical thinking. NO rote memorization (no dates, names, trivial facts).
-7. Match the output language to the source language.
+Please act as an expert tutor and instructional designer. Extract the key information from these sources and convert it into a JSON structure for a flashcard study web app.
 
-JSON format:
-[{"id":"1","topic":"...","lecture_text":"...","summary_points":["..."],"flashcards":[{"type":"multiple_correct","question":"...","options":["A)...","B)...","C)...","D)...","E)..."],"answer":["A)..."],"explanation":"..."}]}]`;
+Follow these strict rules for the JSON output:
+1. Return ONLY valid JSON. No markdown formatting, no introductory text, no conversational filler.
+2. The root must be a JSON Array [ ... ].
+3. Group the information into logical "topics". CRITICAL VOLUME RULE: You MUST create AT LEAST ${qPerSource} granular topics PER LECTURE SOURCE/PAGE. The total output MUST reach a minimum of ${totalQ} total flashcards. Do not summarize entire lectures into one topic — break them down.
+4. For each topic, provide:
+   - "id": A unique string (e.g., "1", "2").
+   - "topic": A short title for this group.
+   - "lecture_text": A comprehensive 3-4 paragraph study guide. Use Markdown (**bold**, *italics*, bullet points) and relevant EMOJIS (🧠, 💡, ⚠️). Sourced ENTIRELY from the provided documents — do not invent facts.
+   - "summary_points": Array of strings. Max 4 bullet points.
+   - "flashcards": Array of objects. Min 5 per topic. EVERY flashcard MUST be type "multiple_correct". No basic short-answer questions.
+      * Format: { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ..."], "explanation": "..." }
+      * "answer" MUST ALWAYS be an array of strings, even for a single correct answer (e.g., ["C) ..."]).
+      * "explanation" MUST be 1-2 sentences explaining why correct answers are right and key distractors are wrong.
+      * ALWAYS provide exactly 5 options (A, B, C, D, E).
+5. QUESTION QUALITY RULE: ALL questions MUST test conceptual understanding and critical thinking. NEVER ask rote memorization questions (no specific dates, exact names, trivial facts).
+6. Make answers clear and easy to read quickly.
+7. Output Language: Match the language of the sources.
+
+Example format (abbreviated):
+[{"id":"1","topic":"Topic Title","lecture_text":"3-4 paragraphs with **bold** and 🧠 emojis...","summary_points":["Key point 1","Key point 2"],"flashcards":[{"type":"multiple_correct","question":"Which of the following best describes X?","options":["A) ...","B) ...","C) ...","D) ...","E) ..."],"answer":["B) ..."],"explanation":"B is correct because... A and C are wrong because..."}]}]`;
     };
 
 
