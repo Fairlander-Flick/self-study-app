@@ -19,6 +19,8 @@
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     padding: var(--space-xl);
+    padding-top: 56px;
+    /* Space for absolute positioned top buttons */
     display: flex;
     flex-direction: column;
     backface-visibility: hidden;
@@ -39,23 +41,27 @@
     margin-bottom: var(--space-md);
     text-align: center;
     letter-spacing: 0.1em;
+    flex-shrink: 0;
 }
 
 .flashcard-question-area {
-    flex: 1;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     overflow-y: auto;
     padding-bottom: var(--space-md);
+    padding-right: 8px;
+    /* For scrollbar */
 }
 
 .flashcard-question-area h3 {
     font-size: var(--text-2xl);
     color: var(--clr-text-primary);
     line-height: 1.4;
-    text-align: center;
+    text-align: left;
     margin-bottom: var(--space-md);
+    flex-shrink: 0;
 }
 
 .flashcard-options {
@@ -63,6 +69,7 @@
     flex-direction: column;
     gap: 12px;
     width: 100%;
+    margin-bottom: 24px;
 }
 
 .flashcard-option-item {
@@ -100,12 +107,31 @@
     opacity: 0.7;
 }
 
+.flashcard-front-actions {
+    flex-shrink: 0;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 16px;
+    align-items: center;
+}
+
 .flashcard-flip-btn {
     width: 100%;
     margin-top: auto;
 }
 
-.flashcard-answer::-webkit-scrollbar-thumb {
+/* Scrollbar for question area if it's too long */
+.flashcard-question-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.flashcard-question-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.flashcard-question-area::-webkit-scrollbar-thumb {
     background: var(--clr-bg-elevated);
     border-radius: 4px;
 }

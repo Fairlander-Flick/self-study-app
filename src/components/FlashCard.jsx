@@ -113,7 +113,7 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
                         )}
                     </div>
 
-                    <div className="flashcard-front-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'space-between', width: '100%', marginTop: '24px', alignItems: 'center' }}>
+                    <div className="flashcard-front-actions">
                         <div style={{ display: 'flex', gap: '8px' }}>
                             {card.lecture_text && (
                                 <button
@@ -142,7 +142,7 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
                                 onClick={handleNext}
                                 style={{ flex: 1, maxWidth: '200px' }}
                             >
-                                {isCorrect ? 'Correct! Next ➔' : 'Incorrect. Retry later ➔'}
+                                {isCorrect ? 'Correct! Next ➔' : 'Incorrect ➔'}
                             </button>
                         )}
                     </div>
