@@ -12,55 +12,22 @@ export default function PromptGeneratorPage() {
     const isFormValid = topic.trim().length > 0 && qPerSource > 0 && totalQ > 0;
 
     const generatePrompt = () => {
-        return `I am studying "${topic.trim()}" and I need you to analyze all the attached sources in this NotebookLM project.
+        return `Analyze all sources in this NotebookLM project about "${topic.trim()}" and output a JSON flashcard deck.
 
-Please act as an expert tutor and instructional designer. Extract the key information from these sources and convert it into a JSON structure for a flashcard study web app.
+RULES (follow strictly):
+1. Output ONLY valid JSON. No markdown, no extra text.
+2. Root is a JSON Array [ ... ].
+3. Create AT LEAST ${qPerSource} topics per source/page, minimum ${totalQ} total flashcards. Break topics down granularly — do NOT summarize whole lectures into one topic.
+4. Each topic object:
+   "id": unique string | "topic": short title | "lecture_text": 3-4 paragraph Markdown study guide with bold, bullets, and emojis (🧠💡⚠️) sourced only from the documents | "summary_points": max 4 strings | "flashcards": array (min 5 per topic).
+5. Every flashcard MUST be type "multiple_correct", 5 options (A–E), answer is ALWAYS an array of strings (even if only 1 correct), plus a 1-2 sentence "explanation" of why correct answers are right and distractors are wrong.
+6. Questions must test conceptual understanding and critical thinking. NO rote memorization (no dates, names, trivial facts).
+7. Match the output language to the source language.
 
-Follow these strict rules for the JSON output:
-1. Return ONLY valid JSON. No markdown formatting (\`\`\`json), no introductory text, no conversational filler.
-2. The root must be a JSON Array [ ... ].
-3. Group the information into logical "topics". CRITICAL VOLUME RULE: Because there are many pages/slides of sources, you MUST create AT LEAST ${qPerSource} granular topics PER LECTURE SOURCE/PAGE. The total output MUST reach an absolute minimum of ${totalQ} total flashcards across all topics to ensure absolute granular mastery. Whichever number is higher (topics per page vs total flashcards), fulfill that! Do not summarize entire lectures into one topic! Break them down.
-4. For each topic, provide:
-   - "id": A unique string (e.g., "1", "2").
-   - "topic": A short title for this group of information.
-   - "lecture_text": A comprehensive, well-structured, 3-4 paragraph study guide. CRITICAL: Use Markdown (e.g., **bold**, *italics*, bullet points) and liberally use relevant EMOJIS (🧠, 💡, ⚠️, etc.) to make it highly engaging and visually broken down. This text MUST be sourced ENTIRELY from the provided NotebookLM documents, do not invent external facts.
-   - "summary_points": An array of strings. Maximum 4 bullet points.
-   - "flashcards": An array of objects. CRITICAL: Provide AT LEAST 5 flashcards per topic (ideally 5-10) to help reach the minimum total of ${totalQ} flashcards. EVERY single flashcard MUST be of type "multiple_correct". DO NOT create basic short answer questions.
-      * Format: { "type": "multiple_correct", "question": "...", "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."], "answer": ["A) ...", "C) ..."], "explanation": "..." }
-      * CRITICAL REQUIREMENT: The "answer" field MUST ALWAYS BE AN ARRAY OF STRINGS. Even if there is only ONE correct answer to the question conceptually, format the answer as a single-element array (e.g., ["C) ..."]).
-      * CRITICAL REQUIREMENT: The "explanation" field MUST be a 1-2 sentence string explaining exactly why the correct answer(s) are correct, and why key distractors are incorrect.
-      MAKE SURE questions ALWAYS have exactly 5 options (A, B, C, D, E).
-5. QUESTION QUALITY RULE (CRITICAL): ALL questions MUST test conceptual understanding, main ideas, and critical thinking. NEVER ask rote memorization questions (like asking for specific dates, exact names, or trivial facts). Focus entirely on "genel bilgi ve fikri anlama" (general knowledge and comprehension).
-6. Make answers clear and easy to read quickly.
-7. Output Language: Keep the language of the output the same as the sources.
-
-Example expected format:
-[
-  {
-    "id": "1",
-    "topic": "Photosynthesis Basics",
-    "lecture_text": "Photosynthesis is the fundamental process by which plants, algae, and some bacteria capture sunlight to create their own food. It takes place primarily in the chloroplasts, where light energy is used to convert water and carbon dioxide into oxygen and energy-rich organic compounds like glucose. This process is the foundation of most life on Earth, as it provides the primary source of organic matter.",
-    "summary_points": [
-      "Plants use sunlight to make food."
-    ],
-      {
-        "type": "multiple_correct",
-        "question": "Which organelle is responsible for photosynthesis?",
-        "options": ["A) Nucleus", "B) Ribosome", "C) Chloroplast", "D) Mitochondria", "E) Endoplasmic Reticulum"],
-        "answer": ["C) Chloroplast"],
-        "explanation": "Chloroplasts contain chlorophyll, which captures sunlight to drive photosynthesis. The other organellas serve different functions, such as the Mitochondria handling cellular respiration."
-      },
-      {
-        "type": "multiple_correct",
-        "question": "Which of the following are REQUIRED for photosynthesis to occur? (Choose all that apply)",
-        "options": ["A) Sunlight", "B) Oxygen", "C) Water", "D) Glucose", "E) Carbon Dioxide"],
-        "answer": ["A) Sunlight", "C) Water", "E) Carbon Dioxide"],
-        "explanation": "Photosynthesis uses Sunlight to convert Water and Carbon Dioxide into energy. Oxygen and Glucose are the outputs, not the required inputs."
-      }
-    ]
-  }
-]`;
+JSON format:
+[{"id":"1","topic":"...","lecture_text":"...","summary_points":["..."],"flashcards":[{"type":"multiple_correct","question":"...","options":["A)...","B)...","C)...","D)...","E)..."],"answer":["A)..."],"explanation":"..."}]}]`;
     };
+
 
     const handleCopy = async () => {
         if (!isFormValid) return;
