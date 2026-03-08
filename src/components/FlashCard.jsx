@@ -98,13 +98,11 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
             {/* Result banner */}
             {isEvaluated && (
                 <div className={`fc-result-banner ${isCorrect ? 'correct' : 'incorrect'}`}>
-                    <div style={{ fontWeight: '600', marginBottom: card.explanation ? '8px' : '0' }}>
-                        {isCorrect ? '✅ Correct!' : '❌ Incorrect — correct answer(s) highlighted in green'}
-                    </div>
+                    <span className="fc-result-title">
+                        {isCorrect ? '✅  Correct!' : '❌  Wrong — see correct answers below'}
+                    </span>
                     {card.explanation && (
-                        <div style={{ fontSize: '0.9rem', fontWeight: 'normal', color: 'var(--clr-text-primary)', lineHeight: '1.4' }}>
-                            💡 {card.explanation}
-                        </div>
+                        <span className="fc-result-explanation">💡 {card.explanation}</span>
                     )}
                 </div>
             )}
@@ -128,16 +126,13 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
                             onClick={() => toggleOption(opt)}
                             disabled={isEvaluated}
                         >
-                            {isMultiSelect && (
-                                <span className="fc-checkbox">{isSelected ? '☑' : '☐'}</span>
-                            )}
+                            <span className="fc-indicator" />
                             <span className="fc-opt-text">{opt}</span>
-                            {isEvaluated && isActuallyCorrect && <span className="fc-badge">✓</span>}
-                            {isEvaluated && isSelected && !isActuallyCorrect && <span className="fc-badge err">✗</span>}
                         </button>
                     );
                 })}
             </div>
+
 
             {/* Footer actions */}
             <div className="fc-footer">
