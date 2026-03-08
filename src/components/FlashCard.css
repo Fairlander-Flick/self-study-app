@@ -1,7 +1,6 @@
 .flashcard-container {
     width: 100%;
-    max-width: 550px;
-    height: 600px;
+    max-width: 700px;
     perspective: 1600px;
 }
 
@@ -46,7 +45,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     overflow-y: auto;
     padding-bottom: var(--space-md);
 }
@@ -77,70 +76,33 @@
     transition: all 0.2s ease;
 }
 
+.flashcard-option-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.flashcard-option-item.selected {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--clr-primary-light);
+    color: var(--clr-text-primary);
+}
+
+.flashcard-option-item.correct {
+    background: rgba(74, 222, 128, 0.15) !important;
+    border-color: var(--clr-success) !important;
+    color: var(--clr-success) !important;
+    font-weight: 600;
+}
+
+.flashcard-option-item.incorrect {
+    background: rgba(248, 113, 113, 0.15) !important;
+    border-color: var(--clr-danger) !important;
+    color: var(--clr-danger) !important;
+    opacity: 0.7;
+}
+
 .flashcard-flip-btn {
     width: 100%;
     margin-top: auto;
-}
-
-.flashcard-answer {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow-y: auto;
-}
-
-.flashcard-answer p {
-    font-size: var(--text-lg);
-    color: var(--clr-text-primary);
-    line-height: 1.6;
-}
-
-.flashcard-answer-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-}
-
-.flashcard-answer-item {
-    background: rgba(74, 222, 128, 0.1);
-    border: 1px solid rgba(74, 222, 128, 0.3);
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
-    font-size: var(--text-md);
-    color: var(--clr-success);
-    text-align: left;
-    font-weight: 500;
-}
-
-.flashcard-actions {
-    display: flex;
-    gap: var(--space-md);
-    margin-top: auto;
-    padding-top: var(--space-md);
-}
-
-.flashcard-btn {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: var(--space-md);
-}
-
-.flashcard-btn .icon {
-    font-size: 20px;
-}
-
-/* Scrollbar for answer if it's too long */
-.flashcard-answer::-webkit-scrollbar {
-    width: 4px;
-}
-
-.flashcard-answer::-webkit-scrollbar-track {
-    background: transparent;
 }
 
 .flashcard-answer::-webkit-scrollbar-thumb {
@@ -151,8 +113,8 @@
 @media (max-width: 600px) {
     .flashcard-container {
         height: auto;
-        min-height: 450px;
-        max-height: calc(100vh - 120px);
+        min-height: 550px !important;
+        max-height: none;
     }
 
     .flashcard-face {

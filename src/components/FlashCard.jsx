@@ -3,28 +3,60 @@ import { motion } from 'framer-motion';
 import './FlashCard.css';
 
 export default function FlashCard({ card, onAnswer, onDiscard }) {
-    const [flipped, setFlipped] = useState(false);
-    const [answered, setAnswered] = useState(false);
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const [isEvaluated, setIsEvaluated] = useState(false);
+    const [isCorrect, setIsCorrect] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
-    const handleAnswer = (knewIt) => {
-        setAnswered(true);
-        // Add small delay so animations play properly
-        setTimeout(() => {
-            onAnswer(knewIt);
-        }, 150);
+    // card.answer is always an array of strings in our new format (or a string from older decks)
+    const correctAnswers = Array.isArray(card.answer) ? card.answer : [card.answer];
+
+    // Determine if it's multiple choice (1 correct) or multiple correct (>1 correct)
+    const isMultiSelect = correctAnswers.length > 1;
+
+    const toggleOption = (opt) => {
+        if (isEvaluated) return; // Prevent changing after evaluation
+
+        if (isMultiSelect) {
+            setSelectedOptions(prev =>
+                prev.includes(opt) ? prev.filter(o => o !== opt) : [...prev, opt]
+            );
+        } else {
+            // Single select: immediately evaluate on click
+            handleEvaluate([opt]);
+        }
+    };
+
+    const handleEvaluate = (selections = selectedOptions) => {
+        if (selections.length === 0) return;
+
+        setIsEvaluated(true);
+        setSelectedOptions(selections); // ensure state is updated if passed directly
+
+        // Check if selections match correct answers exactly
+        const isPerfectMatch =
+            selections.length === correctAnswers.length &&
+            selections.every(s => correctAnswers.includes(s));
+
+        setIsCorrect(isPerfectMatch);
+    };
+
+    const handleNext = () => {
+        // Pass whether they got it right to StudyPage queue logic
+        onAnswer(isCorrect);
     };
 
     return (
-        <div className="flashcard-container">
+        <div className="flashcard-container" style={{ height: 'auto', minHeight: '650px', display: 'flex' }}>
             <motion.div
                 className="flashcard-inner"
-                animate={{ rotateX: flipped ? 180 : 0 }}
-                transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                style={{ transformStyle: 'preserve-3d' }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                style={{ height: '100%', flex: 1 }}
             >
-                {/* Front */}
-                <div className="flashcard-face flashcard-front">
+                {/* Single Face */}
+                <div className="flashcard-face" style={{ height: '100%' }}>
                     <div style={{ position: 'absolute', top: '16px', left: '16px' }}>
                         <button
                             className="btn btn-ghost btn-sm"
@@ -36,89 +68,87 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
                         </button>
                     </div>
                     <div className="flashcard-topic">{card.topicName}</div>
-                    <div className="flashcard-question-area">
-                        <h3>{card.question}</h3>
+
+                    <div className="flashcard-question-area" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <h3 style={{ fontSize: '1.3rem', textAlign: 'left', marginBottom: '8px' }}>{card.question}</h3>
+
+                        {isMultiSelect && !isEvaluated && (
+                            <p style={{ fontSize: '0.85rem', color: 'var(--clr-primary)', marginTop: '-15px' }}>
+                                * Select ALL that apply, then click Check Answer
+                            </p>
+                        )}
+
                         {card.options && card.options.length > 0 && (
                             <div className="flashcard-options">
-                                {card.options.map((opt, i) => (
-                                    <div key={i} className="flashcard-option-item">{opt}</div>
-                                ))}
+                                {card.options.map((opt, i) => {
+                                    const isSelected = selectedOptions.includes(opt);
+                                    const isActuallyCorrect = correctAnswers.includes(opt);
+
+                                    let optionClass = "flashcard-option-item";
+                                    if (isSelected) optionClass += " selected";
+
+                                    if (isEvaluated) {
+                                        if (isActuallyCorrect) optionClass += " correct"; // Highlight all correct answers
+                                        else if (isSelected && !isActuallyCorrect) optionClass += " incorrect"; // Highlight wrong guesses
+                                    }
+
+                                    return (
+                                        <div
+                                            key={i}
+                                            className={optionClass}
+                                            onClick={() => toggleOption(opt)}
+                                            style={{ cursor: isEvaluated ? 'default' : 'pointer' }}
+                                        >
+                                            {/* Show checkbox-like indicator for multi-select */}
+                                            {isMultiSelect && (
+                                                <span style={{ marginRight: '10px', fontSize: '1.1rem' }}>
+                                                    {isSelected ? '☑️' : '⬜'}
+                                                </span>
+                                            )}
+                                            {opt}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
-                    <div className="flashcard-front-actions" style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', width: '100%', marginTop: 'auto' }}>
-                        {card.lecture_text && (
+
+                    <div className="flashcard-front-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'space-between', width: '100%', marginTop: '24px', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            {card.lecture_text && (
+                                <button
+                                    className="btn btn-ghost btn-sm"
+                                    onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
+                                    style={{ fontSize: '13px' }}
+                                >
+                                    📖 Read Context
+                                </button>
+                            )}
+                        </div>
+
+                        {!isEvaluated ? (
+                            isMultiSelect ? (
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={() => handleEvaluate()}
+                                    disabled={selectedOptions.length === 0}
+                                >
+                                    Check Answer
+                                </button>
+                            ) : null // Single select evaluates implicitly on click
+                        ) : (
                             <button
-                                className="btn btn-ghost btn-sm"
-                                onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
-                                style={{ marginRight: 'auto', fontSize: '13px' }}
+                                className={`btn ${isCorrect ? 'btn-success' : 'btn-danger'}`}
+                                onClick={handleNext}
+                                style={{ flex: 1, maxWidth: '200px' }}
                             >
-                                📖 Read Context
+                                {isCorrect ? 'Correct! Next ➔' : 'Incorrect. Retry later ➔'}
                             </button>
                         )}
-                        <button
-                            className="btn btn-primary flashcard-flip-btn"
-                            onClick={() => setFlipped(true)}
-                        >
-                            Show Answer ↻
-                        </button>
                     </div>
                 </div>
 
-                {/* Back */}
-                <div className="flashcard-face flashcard-back">
-                    <div style={{ position: 'absolute', top: '16px', left: '16px' }}>
-                        <button
-                            className="btn btn-ghost btn-sm"
-                            onClick={(e) => { e.stopPropagation(); if (onDiscard) onDiscard(); }}
-                            title="Discard this question permanently"
-                            style={{ color: 'var(--clr-danger)', padding: '6px 10px', fontSize: '12px', border: '1px solid rgba(248, 113, 113, 0.3)', background: 'rgba(248, 113, 113, 0.05)' }}
-                        >
-                            🗑️ Discard
-                        </button>
-                    </div>
-                    <div className="flashcard-topic">{card.topicName}</div>
-                    <div className="flashcard-answer">
-                        {Array.isArray(card.answer) ? (
-                            <div className="flashcard-answer-list">
-                                {card.answer.map((ans, i) => (
-                                    <div key={i} className="flashcard-answer-item">{ans}</div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p>{card.answer}</p>
-                        )}
-                    </div>
-                    <div className="flashcard-actions">
-                        <button
-                            className="btn btn-danger flashcard-btn"
-                            onClick={() => handleAnswer(false)}
-                            disabled={answered}
-                        >
-                            <span>Ask Again</span>
-                            <span className="icon">🔁</span>
-                        </button>
-                        <button
-                            className="btn btn-success flashcard-btn"
-                            onClick={() => handleAnswer(true)}
-                            disabled={answered}
-                        >
-                            <span>Got it</span>
-                            <span className="icon">✓</span>
-                        </button>
-                    </div>
-                    {card.lecture_text && (
-                        <div style={{ position: 'absolute', top: '16px', right: '16px' }}>
-                            <button
-                                className="btn btn-ghost btn-icon"
-                                onClick={(e) => { e.stopPropagation(); setShowModal(true); }}
-                                title="Read Context"
-                            >
-                                📖
-                            </button>
-                        </div>
-                    )}
-                </div>
+
             </motion.div>
 
             {/* Context Modal */}
