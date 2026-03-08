@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getDeck, saveSession, updateDeck } from '../services/db.js';
+import { getDeck, saveSession, updateDeck, addXP } from '../services/db.js';
 import FlashCard from '../components/FlashCard.jsx';
 import './StudyPage.css';
 
@@ -58,6 +58,9 @@ export default function StudyPage() {
 
         const score = Math.round((stats.correct / stats.totalAnswered) * 100) || 0;
         const durationMs = Date.now() - stats.startTime;
+
+        // Award XP based on performance
+        await addXP(stats.correct, stats.totalAnswered);
 
         const sessionId = await saveSession(id, {
             score,

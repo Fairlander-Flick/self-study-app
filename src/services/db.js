@@ -1,12 +1,12 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'self-study-app';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 // Initialize the database
 const getDB = async () => {
   return openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
+    upgrade(db, oldVersion) {
       // Decks store: holds all imported decks
       if (!db.objectStoreNames.contains('decks')) {
         const deckStore = db.createObjectStore('decks', { keyPath: 'id' });
@@ -19,8 +19,33 @@ const getDB = async () => {
         sessionStore.createIndex('deckId', 'deckId');
         sessionStore.createIndex('createdAt', 'createdAt');
       }
+
+      // Profile store: global user XP, level, and stats (v2)
+      if (oldVersion < 2 && !db.objectStoreNames.contains('profile')) {
+        db.createObjectStore('profile', { keyPath: 'id' });
+      }
     },
   });
+};
+
+// ─── XP & Level Helpers ───────────────────────────────────
+
+/** XP required for each level: Level 1 = 10, Level N = Level(N-1) * 1.2 */
+export const getLevelInfo = (totalXp) => {
+  let level = 1;
+  let xpForCurrentLevel = 0;
+  let xpForNextLevel = 10;
+
+  while (totalXp >= xpForCurrentLevel + xpForNextLevel) {
+    xpForCurrentLevel += xpForNextLevel;
+    level++;
+    xpForNextLevel = Math.round(xpForNextLevel * 1.2);
+  }
+
+  const xpIntoCurrentLevel = totalXp - xpForCurrentLevel;
+  const progress = xpForNextLevel > 0 ? xpIntoCurrentLevel / xpForNextLevel : 0;
+
+  return { level, xpIntoCurrentLevel, xpForNextLevel, progress };
 };
 
 // ─── Deck Operations ──────────────────────────────────────
@@ -131,4 +156,39 @@ export const getBestScore = async (deckId) => {
   const sessions = await getSessionsForDeck(deckId);
   if (!sessions.length) return null;
   return Math.max(...sessions.map(s => s.score));
+};
+
+// ─── Profile / XP Operations ──────────────────────────────
+
+const PROFILE_ID = 'user_profile';
+
+export const getProfile = async () => {
+  const db = await getDB();
+  const profile = await db.get('profile', PROFILE_ID);
+  return profile || { id: PROFILE_ID, xp: 0, totalQuestions: 0, totalCorrect: 0 };
+};
+
+/**
+ * Award XP after a session. +10 per correct, +2 per incorrect (encouragement).
+ */
+export const addXP = async (correct, total) => {
+  const db = await getDB();
+  const profile = await getProfile();
+  const earned = correct * 10 + (total - correct) * 2;
+  const updated = {
+    ...profile,
+    xp: profile.xp + earned,
+    totalQuestions: profile.totalQuestions + total,
+    totalCorrect: profile.totalCorrect + correct,
+  };
+  await db.put('profile', updated);
+  return updated;
+};
+
+/**
+ * Get all sessions across all decks (for global stats)
+ */
+export const getAllSessions = async () => {
+  const db = await getDB();
+  return db.getAll('sessions');
 };
