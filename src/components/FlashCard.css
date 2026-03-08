@@ -1,160 +1,298 @@
-.flashcard-container {
-    width: 100%;
-    max-width: 700px;
-    perspective: 1600px;
-}
+/* =============================================
+   FLASHCARD — clean, responsive quiz layout 
+   ============================================= */
 
-.flashcard-inner {
+.fc-card {
     width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-}
-
-.flashcard-face {
-    position: absolute;
-    inset: 0;
+    max-width: 720px;
+    margin: 0 auto;
     background: var(--gradient-card);
     border: 1px solid var(--clr-border);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    padding: var(--space-xl);
+    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     display: flex;
     flex-direction: column;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    gap: 0;
+    overflow: hidden;
 }
 
-.flashcard-back {
-    transform: rotateX(180deg);
-    background: var(--clr-bg-surface);
-    border: 1px solid var(--clr-primary-glow);
+/* ── Header ─────────────────────────────────── */
+.fc-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    flex-shrink: 0;
 }
 
-.flashcard-topic {
-    font-size: var(--text-xs);
+.fc-discard-btn {
+    background: rgba(248, 113, 113, 0.07);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: var(--clr-danger);
+    border-radius: var(--radius-md);
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.fc-discard-btn:hover {
+    background: rgba(248, 113, 113, 0.16);
+}
+
+.fc-topic {
+    flex: 1;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--clr-primary);
-    margin-bottom: var(--space-md);
-    text-align: center;
     letter-spacing: 0.1em;
+    color: var(--clr-primary);
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fc-context-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--clr-text-muted);
+    border-radius: var(--radius-md);
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.fc-context-btn:hover {
+    background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Question ────────────────────────────────── */
+.fc-question {
+    padding: 24px 24px 12px;
     flex-shrink: 0;
 }
 
-.flashcard-question-area {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    overflow-y: auto;
-    padding-bottom: var(--space-md);
-    padding-right: 8px;
-    /* For scrollbar */
-}
-
-.flashcard-question-area h3 {
-    font-size: var(--text-2xl);
+.fc-question p {
+    font-size: 1.15rem;
+    line-height: 1.6;
     color: var(--clr-text-primary);
-    line-height: 1.4;
-    text-align: left;
-    margin-bottom: var(--space-md);
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ── Hint ────────────────────────────────────── */
+.fc-hint {
+    padding: 0 24px 10px;
+    font-size: 0.8rem;
+    color: var(--clr-primary-light);
+    margin: 0;
     flex-shrink: 0;
 }
 
-.flashcard-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    margin-bottom: 24px;
+/* ── Result banner ───────────────────────────── */
+.fc-result-banner {
+    margin: 0 24px 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    flex-shrink: 0;
 }
 
-.flashcard-option-item {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.fc-result-banner.correct {
+    background: rgba(74, 222, 128, 0.12);
+    border: 1px solid rgba(74, 222, 128, 0.35);
+    color: var(--clr-success);
+}
+
+.fc-result-banner.incorrect {
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    color: var(--clr-danger);
+}
+
+/* ── Options ─────────────────────────────────── */
+.fc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 4px 24px 16px;
+    overflow-y: auto;
+    flex: 1 1 auto;
+}
+
+.fc-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
     padding: 12px 16px;
     border-radius: var(--radius-md);
-    font-size: var(--text-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
     color: var(--clr-text-secondary);
-    text-align: left;
-    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    line-height: 1.5;
 }
 
-.flashcard-option-item:hover {
+.fc-option:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.08);
-}
-
-.flashcard-option-item.selected {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: var(--clr-primary-light);
+    border-color: rgba(255, 255, 255, 0.22);
     color: var(--clr-text-primary);
 }
 
-.flashcard-option-item.correct {
-    background: rgba(74, 222, 128, 0.15) !important;
+.fc-option:disabled {
+    cursor: default;
+}
+
+.fc-option.fc-selected {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: var(--clr-primary);
+    color: var(--clr-text-primary);
+}
+
+.fc-option.fc-correct {
+    background: rgba(74, 222, 128, 0.14) !important;
     border-color: var(--clr-success) !important;
     color: var(--clr-success) !important;
     font-weight: 600;
 }
 
-.flashcard-option-item.incorrect {
-    background: rgba(248, 113, 113, 0.15) !important;
+.fc-option.fc-incorrect {
+    background: rgba(248, 113, 113, 0.12) !important;
     border-color: var(--clr-danger) !important;
     color: var(--clr-danger) !important;
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
-.flashcard-front-actions {
+.fc-checkbox {
+    font-size: 1.1rem;
     flex-shrink: 0;
+    line-height: 1.5;
+}
+
+.fc-opt-text {
+    flex: 1;
+}
+
+.fc-badge {
+    flex-shrink: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.fc-badge.err {
+    color: var(--clr-danger);
+}
+
+/* ── Footer ──────────────────────────────────── */
+.fc-footer {
     display: flex;
-    gap: 12px;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 16px;
+    justify-content: flex-end;
     align-items: center;
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
 }
 
-.flashcard-flip-btn {
-    width: 100%;
-    margin-top: auto;
+.fc-check-btn {
+    background: var(--clr-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
 }
 
-/* Scrollbar for question area if it's too long */
-.flashcard-question-area::-webkit-scrollbar {
-    width: 6px;
+.fc-check-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
-.flashcard-question-area::-webkit-scrollbar-track {
+.fc-check-btn:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.fc-next-btn {
+    flex: 1;
+    padding: 13px 24px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.fc-next-btn:hover {
+    opacity: 0.85;
+}
+
+.fc-next-btn.success {
+    background: var(--clr-success);
+    color: #000;
+}
+
+.fc-next-btn.retry {
+    background: var(--clr-danger);
+    color: #fff;
+}
+
+/* ── Scrollbar ───────────────────────────────── */
+.fc-options::-webkit-scrollbar {
+    width: 4px;
+}
+
+.fc-options::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.flashcard-question-area::-webkit-scrollbar-thumb {
+.fc-options::-webkit-scrollbar-thumb {
     background: var(--clr-bg-elevated);
     border-radius: 4px;
 }
 
+/* ── Mobile ──────────────────────────────────── */
 @media (max-width: 600px) {
-    .flashcard-container {
-        height: auto;
-        min-height: 550px !important;
-        max-height: none;
+    .fc-question p {
+        font-size: 1rem;
     }
 
-    .flashcard-face {
-        padding: var(--space-md);
-    }
-
-    .flashcard-question-area h3 {
-        font-size: var(--text-xl);
-    }
-
-    .flashcard-option-item {
+    .fc-option {
+        font-size: 0.88rem;
         padding: 10px 12px;
-        font-size: var(--text-sm);
     }
 
-    .flashcard-btn {
-        padding: 10px;
+    .fc-footer {
+        padding: 12px 16px;
+    }
+
+    .fc-question {
+        padding: 18px 16px 10px;
+    }
+
+    .fc-options {
+        padding: 4px 16px 12px;
+    }
+
+    .fc-hint {
+        padding: 0 16px 8px;
+    }
+
+    .fc-result-banner {
+        margin: 0 16px 10px;
     }
 }
