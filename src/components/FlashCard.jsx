@@ -57,17 +57,27 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
             >
                 {/* Single Face */}
                 <div className="flashcard-face" style={{ height: '100%' }}>
-                    <div style={{ position: 'absolute', top: '16px', left: '16px' }}>
+                    {/* Card Header (Discard & Topic) */}
+                    <div className="flashcard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px', gap: '12px' }}>
                         <button
                             className="btn btn-ghost btn-sm"
                             onClick={(e) => { e.stopPropagation(); if (onDiscard) onDiscard(); }}
                             title="Discard this question permanently"
-                            style={{ color: 'var(--clr-danger)', padding: '6px 10px', fontSize: '12px', border: '1px solid rgba(248, 113, 113, 0.3)', background: 'rgba(248, 113, 113, 0.05)' }}
+                            style={{
+                                color: 'var(--clr-danger)',
+                                padding: '6px 10px',
+                                fontSize: '12px',
+                                border: '1px solid rgba(248, 113, 113, 0.3)',
+                                background: 'rgba(248, 113, 113, 0.05)',
+                                flexShrink: 0
+                            }}
                         >
                             🗑️ Discard
                         </button>
+                        <div className="flashcard-topic" style={{ flex: 1, textAlign: 'right', margin: 0, alignSelf: 'center' }}>
+                            {card.topicName}
+                        </div>
                     </div>
-                    <div className="flashcard-topic">{card.topicName}</div>
 
                     <div className="flashcard-question-area" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <h3 style={{ fontSize: '1.3rem', textAlign: 'left', marginBottom: '8px' }}>{card.question}</h3>
