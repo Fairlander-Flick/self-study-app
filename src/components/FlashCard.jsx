@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './FlashCard.css';
 
 export default function FlashCard({ card, onAnswer, onDiscard }) {
@@ -9,6 +9,39 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
 
     const correctAnswers = Array.isArray(card.answer) ? card.answer : [card.answer];
     const isMultiSelect = correctAnswers.length > 1;
+    const options = card.options || [];
+
+    // ── Keyboard shortcuts ──────────────────────────────────
+    useEffect(() => {
+        const handleKey = (e) => {
+            // 1-5: select option by index
+            if (!isEvaluated && e.key >= '1' && e.key <= '5') {
+                const idx = parseInt(e.key, 10) - 1;
+                if (idx < options.length) {
+                    const opt = options[idx];
+                    if (isMultiSelect) {
+                        setSelectedOptions(prev =>
+                            prev.includes(opt) ? prev.filter(o => o !== opt) : [...prev, opt]
+                        );
+                    } else {
+                        handleEvaluate([opt]);
+                    }
+                }
+            }
+            // Enter / Space: check (multi-select) or go next (post-eval)
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (isEvaluated) {
+                    if (onAnswer) onAnswer(isCorrect);
+                } else if (isMultiSelect && selectedOptions.length > 0) {
+                    handleEvaluate(selectedOptions);
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+    }, [isEvaluated, isCorrect, selectedOptions, isMultiSelect, options]);
+
 
     const toggleOption = (opt) => {
         if (isEvaluated) return;
@@ -128,6 +161,11 @@ export default function FlashCard({ card, onAnswer, onDiscard }) {
                         {isCorrect ? 'Next Question ➔' : 'Got it, retry later ➔'}
                     </button>
                 )}
+            </div>
+
+            {/* Keyboard hint */}
+            <div className="fc-keyboard-hint">
+                ⌨️ <strong>1–5</strong> select · <strong>Enter</strong> {isEvaluated ? 'next' : 'check'}
             </div>
 
             {/* Context Modal */}

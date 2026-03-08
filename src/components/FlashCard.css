@@ -296,3 +296,13 @@
         margin: 0 16px 10px;
     }
 }
+
+/* Keyboard hint bar */
+.fc-keyboard-hint {
+    text-align: center;
+    font-size: 11px;
+    color: var(--clr-text-muted);
+    padding: 6px 16px 10px;
+    letter-spacing: 0.02em;
+    opacity: 0.75;
+}
